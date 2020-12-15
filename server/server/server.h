@@ -15,10 +15,15 @@
 using namespace std;
 
 //CLIENT OBJECT
-struct CLIENT {
+struct CLIENT 
+{
     char username[32];
     char client_ip[256];
     SOCKET sock;
 };
-
+int64_t GetFileSize(const std::string& fileName);
+int RecvBuffer(SOCKET s, char* buffer, int bufferSize, int chunkSize = 4 * 1024);
+int SendBuffer(SOCKET s, const char* buffer, int bufferSize, int chunkSize = 4 * 1024);
+int64_t SendFile(SOCKET s, const std::string& fileName, int chunkSize = 64 * 1024);
+int64_t RecvFile(SOCKET s, const std::string& fileName, int chunkSize = 64 * 1024);
 #endif

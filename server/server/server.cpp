@@ -1,81 +1,93 @@
 ﻿#include "server.h"
-
-int main() {
-    //khởi tạo winsock
-    WSADATA some_kind_of_data;
-    WSAStartup(MAKEWORD(2, 2), &some_kind_of_data);
-
-    //tạo vector clients
-    vector<CLIENT> clients;
-    cout << "Waiting for clients..." << endl;
-
-    //nhận kết nối - THREAD 01
-    thread accepter([&clients]() {
-        sockaddr_in listen_address;
-        listen_address.sin_family = AF_INET;
-        listen_address.sin_port = htons(666);
-        listen_address.sin_addr.S_un.S_addr = INADDR_ANY;
-        SOCKET listen_socket = socket(AF_INET, SOCK_STREAM, 0);
-        bind(listen_socket, (sockaddr*)&listen_address, sizeof(listen_address));
-        listen(listen_socket, SOMAXCONN);
-        sockaddr_in client_address;
-        int client_address_size = sizeof(client_address);
-        SOCKET client_socket;
-        u_long non_blocking = true;
-        CLIENT new_client;
-        while (true) {
-            client_socket = accept(listen_socket, (sockaddr*)&client_address, &client_address_size);
-            recv(client_socket, new_client.username, 32, 0);
-            if (client_socket != INVALID_SOCKET) { 
-                ioctlsocket(client_socket, FIONBIO, &non_blocking);
-                new_client.sock = client_socket;
-                inet_ntop(AF_INET, &client_address.sin_addr, new_client.client_ip, 256);
-                clients.push_back(new_client);
-                cout << "User " << new_client.username << " Connected!" << std::endl;
-            }
-        }});
-
-    //kiểm tra ai đã ngắt kết nối - THREAD 02
-    thread checker([&clients]() {
-        while (true) {
-            for (int i = 0; i < clients.size(); i++) {
-                if (send(clients[i].sock, "", 1, 0) < 0) {
-                    cout << "User " << clients[i].username << " disconnected!" << std::endl;
-                    clients.erase(clients.begin() + i);
-                }
-            }
-            this_thread::sleep_for(chrono::seconds(1));
-        }});
-
-    //nhận tin từ client - THREAD 03
-    thread receiver([&clients]() {
-        //chức năng login: nhận id,pass rồi kiểm tra trong database. nếu có thì gửi lại tin success, không thì fail
-        //register: nhận id,pass rồi add vào database
-        //toàn nhận data từ client rồi chỉnh sửa trong database
-        char buffer[1024];
-        while (true) {
-            for (int i = 0; i < clients.size(); i++) {
-                memset(buffer, 0, sizeof(buffer));
-                if (recv(clients[i].sock, buffer, sizeof(buffer), 0) > 1) {
-                    for (int y = 0; y < clients.size(); y++)
-                        if (i != y) {
-                             stringstream msg;
-                            msg << clients[i].username << ": " << buffer;
-                            send(clients[y].sock, msg.str().c_str(), msg.str().size(), 0);
-                        }
-                }
-            }
-        }});
-
-    //cái này k có gì :D - MAIN THREAD
-    string msg;
-    while (true) {
-        getline( cin, msg);
-        if (msg == "stop") {
-            break;
-        }
+int64_t GetFileSize(const std::string& fileName)
+{
+    FILE* f;
+    if (fopen_s(&f, fileName.c_str(), "rb") != 0)
+    {
+        return -1;
     }
-    WSACleanup();
-    quick_exit(0);
-    return 0;
+    _fseeki64(f, 0, SEEK_END);
+    const int64_t len = _ftelli64(f);
+    fclose(f);
+    return len;
 }
+int RecvBuffer(SOCKET s, char* buffer, int bufferSize, int chunkSize = 4 * 1024)
+{
+    int i = 0;
+    while (i < bufferSize)
+    {
+        const int l = recv(s, &buffer[i], __min(chunkSize, bufferSize - i), 0);
+        if (l < 0) { return l; }
+        i += l;
+    }
+    return i;
+}
+int SendBuffer(SOCKET s, const char* buffer, int bufferSize, int chunkSize = 4 * 1024)
+{
+
+    int i = 0;
+    while (i < bufferSize)
+    {
+        const int l = send(s, &buffer[i], __min(chunkSize, bufferSize - i), 0);
+        if (l < 0) { return l; }
+        i += l;
+    }
+    return i;
+}
+int64_t SendFile(SOCKET s, const std::string& fileName, int chunkSize = 64 * 1024)
+{
+
+    const int64_t fileSize = GetFileSize(fileName);
+    if (fileSize < 0) { return -1; }
+
+    std::ifstream file(fileName, std::ifstream::binary);
+    if (file.fail()) { return -1; }
+
+    if (SendBuffer(s, reinterpret_cast<const char*>(&fileSize), sizeof(fileSize)) != sizeof(fileSize))
+    {
+        return -2;
+    }
+
+    char* buffer = new char[chunkSize];
+    bool errored = false;
+    int64_t i = fileSize;
+    while (i != 0) {
+        const int64_t ssize = __min(i, (int64_t)chunkSize);
+        if (!file.read(buffer, ssize)) { errored = true; break; }
+        const int l = SendBuffer(s, buffer, (int)ssize);
+        if (l < 0) { errored = true; break; }
+        i -= l;
+    }
+    delete[] buffer;
+
+    file.close();
+
+    return errored ? -3 : fileSize;
+}
+int64_t RecvFile(SOCKET s, const std::string& fileName, int chunkSize = 64 * 1024)
+{
+    std::ofstream file(fileName, std::ofstream::binary);
+    if (file.fail()) { return -1; }
+
+    int64_t fileSize;
+    if (RecvBuffer(s, reinterpret_cast<char*>(&fileSize),
+        sizeof(fileSize)) != sizeof(fileSize)) {
+        return -2;
+    }
+
+    char* buffer = new char[chunkSize];
+    bool errored = false;
+    int64_t i = fileSize;
+    while (i != 0) {
+        const int r = RecvBuffer(s, buffer, (int)__min(i, (int64_t)chunkSize));
+        if ((r < 0) || !file.write(buffer, r)) { errored = true; break; }
+        i -= r;
+    }
+    delete[] buffer;
+
+    file.close();
+
+    return errored ? -3 : fileSize;
+}
+
+

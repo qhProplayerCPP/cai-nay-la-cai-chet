@@ -1,73 +1,92 @@
 ﻿#include "client.h"
+int64_t GetFileSize(const std::string& fileName) 
+{
+    FILE* f;
+    if (fopen_s(&f, fileName.c_str(), "rb") != 0) 
+    {
+        return -1;
+    }
+    _fseeki64(f, 0, SEEK_END);
+    const int64_t len = _ftelli64(f);
+    fclose(f);
+    return len;
+}
+int RecvBuffer(SOCKET s, char* buffer, int bufferSize, int chunkSize = 4 * 1024) 
+{
+    int i = 0;
+    while (i < bufferSize) 
+    {
+        const int l = recv(s, &buffer[i], __min(chunkSize, bufferSize - i), 0);
+        if (l < 0) { return l; } 
+        i += l;
+    }
+    return i;
+}
+int SendBuffer(SOCKET s, const char* buffer, int bufferSize, int chunkSize = 4 * 1024) 
+{
 
-int main() {
-    //khởi tạo winsock
-    WSADATA some_kind_of_data;
-    WSAStartup(MAKEWORD(2, 2), &some_kind_of_data);
+    int i = 0;
+    while (i < bufferSize) 
+    {
+        const int l = send(s, &buffer[i], __min(chunkSize, bufferSize - i), 0);
+        if (l < 0) { return l; } 
+        i += l;
+    }
+    return i;
+}
+int64_t SendFile(SOCKET s, const std::string& fileName, int chunkSize = 64 * 1024) 
+{
 
-    //tạo cái socket
-    sockaddr_in connect_adress;
-    connect_adress.sin_family = AF_INET;
-    connect_adress.sin_port = htons(666);
-    inet_pton(AF_INET, "127.0.0.1", &connect_adress.sin_addr);
-    SOCKET connection_socket = socket(AF_INET, SOCK_STREAM, 0);
+    const int64_t fileSize = GetFileSize(fileName);
+    if (fileSize < 0) { return -1; }
 
-    //kết nối đến sv - THREAD 01
-    bool is_connected = false;
+    std::ifstream file(fileName, std::ifstream::binary);
+    if (file.fail()) { return -1; }
 
-    thread connector([&connection_socket, &connect_adress, &is_connected]() {
-        char username[32];
-        cout << "Enter your username: ";
-        cin.get(username, 32);
-        while (true) {
-            if (send(connection_socket, "", 1, 0) == SOCKET_ERROR) {
-                is_connected = false;
-                connection_socket = socket(AF_INET, SOCK_STREAM, 0);
-                while (true) {
-                    cout << "Trying to connect to server...\n";
-                    if (connect(connection_socket, (sockaddr*)&connect_adress, sizeof(connect_adress)) != SOCKET_ERROR) {
-                        send(connection_socket, username, strlen(username) + 1, 0);
-                        cout << "Connected to server!\n";
-                        //chức năng login: nhập id,pass rồi gửi cho sv
-                        //chức năng register
-                        //============nếu login rồi===========
-                        //đổi mk,thông tin
-                        //check user
-                        //kiểm tra thằng nào online để chat 1:1
-                        is_connected = true;
-                        break;
-                    }
-                }
-            }
-            this_thread::sleep_for(chrono::seconds(1));
-        }});
-
-    //nhận tin nhắn từ sv - THREAD 02
-    thread receiver([&connection_socket, &is_connected]() {
-        //download file ở thread này
-        char buffer[1024];
-        while (true) {
-            if (is_connected == true) {
-                memset(buffer, 0, sizeof(buffer));
-                if (recv(connection_socket, buffer, sizeof(buffer), 0) > 1)
-                    cout << buffer << endl;
-            }
-            else  this_thread::sleep_for(chrono::seconds(1));
-        }});
-
-    //gửi tin nhắn - MAIN THREAD
-    //upload file ở thread này
-    string msg;
-    while (true) {
-        if (is_connected == true) {
-            getline(cin, msg);
-            if (send(connection_socket, msg.c_str(), msg.size() + 1, 0) <= 0)
-                cout << "Failed to send the message...\n";
-        }
-        else this_thread::sleep_for(chrono::seconds(1));
+    if (SendBuffer(s, reinterpret_cast<const char*>(&fileSize), sizeof(fileSize)) != sizeof(fileSize)) 
+    {
+        return -2;
     }
 
-    closesocket(connection_socket);
-    WSACleanup();
-    return 0;
+    char* buffer = new char[chunkSize];
+    bool errored = false;
+    int64_t i = fileSize;
+    while (i != 0) {
+        const int64_t ssize = __min(i, (int64_t)chunkSize);
+        if (!file.read(buffer, ssize)) { errored = true; break; }
+        const int l = SendBuffer(s, buffer, (int)ssize);
+        if (l < 0) { errored = true; break; }
+        i -= l;
+    }
+    delete[] buffer;
+
+    file.close();
+
+    return errored ? -3 : fileSize;
 }
+int64_t RecvFile(SOCKET s, const std::string& fileName, int chunkSize = 64 * 1024) 
+{
+    std::ofstream file(fileName, std::ofstream::binary);
+    if (file.fail()) { return -1; }
+
+    int64_t fileSize;
+    if (RecvBuffer(s, reinterpret_cast<char*>(&fileSize),
+        sizeof(fileSize)) != sizeof(fileSize)) {
+        return -2;
+    }
+
+    char* buffer = new char[chunkSize];
+    bool errored = false;
+    int64_t i = fileSize;
+    while (i != 0) {
+        const int r = RecvBuffer(s, buffer, (int)__min(i, (int64_t)chunkSize));
+        if ((r < 0) || !file.write(buffer, r)) { errored = true; break; }
+        i -= r;
+    }
+    delete[] buffer;
+
+    file.close();
+
+    return errored ? -3 : fileSize;
+}
+
