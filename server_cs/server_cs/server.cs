@@ -41,7 +41,7 @@ namespace server_cs
         void get_data(ref List<user_info> all_users)
         {
             all_users = new List<user_info>();
-            using (StreamReader fin = new StreamReader("C:\\Users\\User\\source\\repos\\server_cs\\server_cs\\database.txt"))
+            using (StreamReader fin = new StreamReader("database.txt"))
             {
                 while (!fin.EndOfStream)
                 {
@@ -152,7 +152,7 @@ namespace server_cs
                             else
                             {
                                 client.Send(serialize("true"));
-                                using (StreamWriter sw = new StreamWriter("C:\\Users\\User\\source\\repos\\server_cs\\server_cs\\database.txt", true))
+                                using (StreamWriter sw = new StreamWriter("database.txt", true))
                                 {
                                     sw.WriteLine(info[1]);
                                     sw.WriteLine(info[2]);
