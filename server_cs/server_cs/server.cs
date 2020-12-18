@@ -92,6 +92,7 @@ namespace server_cs
                                 return;
                             foreach (user_info item in all_users)
                             {
+                                //nhan username voi password
                                 if (item.username == info[1] && item.password == info[2])
                                 {
                                     check = true;
@@ -227,5 +228,15 @@ namespace server_cs
             BinaryFormatter formatter = new BinaryFormatter();
             return formatter.Deserialize(stream);
         }
+
+
+
+        //=================================hien
+
+
+        //===============================huy
+
+
+        //===========================nhan
     }
 }
