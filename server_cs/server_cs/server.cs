@@ -17,15 +17,12 @@ namespace server_cs
 {
     public partial class server : Form
     {
-        //khoi tao server
         public server()
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
-            get_data(ref all_users);
             connect();
         }
-        //khai bao bien
         IPEndPoint ip;
         Socket server_socket;
         List<Socket> client_list;
@@ -37,7 +34,6 @@ namespace server_cs
             public string fullname;
             public string dob;
         }
-        //ham doc file
         void get_data(ref List<user_info> all_users)
         {
             all_users = new List<user_info>();
@@ -54,14 +50,13 @@ namespace server_cs
                 }
             }
         }
-        //ham de client ket noi den server
         void connect()
         {
             client_list = new List<Socket>();
             ip = new IPEndPoint(IPAddress.Any, 2503);
             server_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp); ;
             server_socket.Bind(ip);
-            server_socket.Listen(10);
+            server_socket.Listen(50);
 
             Thread check_login = new Thread(login);
             check_login.IsBackground = true;
@@ -71,7 +66,6 @@ namespace server_cs
             check_reg.IsBackground = true;
             check_reg.Start();
         }
-        //login
         void login()
         {
             while (true)
@@ -82,6 +76,7 @@ namespace server_cs
                     {
                         while (true)
                         {
+                            get_data(ref all_users);
                             byte[] data = new byte[1024 * 5000];
                             client.Receive(data);
                             string message = (string)deserialize(data);
@@ -89,7 +84,7 @@ namespace server_cs
                             string[] info = message.Split(' ');
                             bool check = false;
                             if (info[0] != "login")
-                                return;
+                                break;
                             foreach (user_info item in all_users)
                             {
                                 //nhan username voi password
@@ -119,7 +114,6 @@ namespace server_cs
                 check_user.Start();
             }
         }
-        //register
         void register()
         {
             while (true)
@@ -130,6 +124,7 @@ namespace server_cs
                     {
                         while (true)
                         {
+                            get_data(ref all_users);
                             byte[] data = new byte[1024 * 5000];
                             client.Receive(data);
                             string message = (string)deserialize(data);
@@ -137,7 +132,7 @@ namespace server_cs
                             string[] info = message.Split(' ');
                             bool check = true;
                             if (info[0] != "register")
-                                return;
+                                break;
                             foreach (user_info item in all_users)
                             {
                                 if (item.username == info[1])
@@ -173,47 +168,10 @@ namespace server_cs
                 check_user.Start();
             }
         }
-        //ham dong server
-        void close()
-        {
-            server_socket.Close();
-        }
-        //cai nay cua code mau~ ma chua can toi nen chua dung
-        void send(Socket client)
-        {
-            
-        }
-        //cai nay cung cua code mau chua dung toi
-        void receive(object obj)
-        {
-            Socket client = obj as Socket;
-            try
-            {
-                while (true)
-                {
-                    byte[] data = new byte[1024 * 5000];
-                    client.Receive(data);
-                    string message = (string)deserialize(data);
-                    add_message(message);
-                    foreach (Socket item in client_list)
-                    {
-                        if (item != null && item != client)
-                            item.Send(serialize(message));
-                    }
-                }
-            }
-            catch
-            {
-                client_list.Remove(client);
-                client.Close();
-            }
-        }
-        //2 cai nay de hien thi tin nhan thoi
         void add_message(string s)
         {
             chat_box.Items.Add(new ListViewItem() { Text = "Server: " + s });
         }
-        //ham phan manh
         byte[] serialize(object obj)
         {
             MemoryStream stream = new MemoryStream();
@@ -221,7 +179,6 @@ namespace server_cs
             formatter.Serialize(stream, obj);
             return stream.ToArray();
         }
-        //ham gom manh
         object deserialize(byte[] data)
         {
             MemoryStream stream = new MemoryStream(data);
@@ -234,9 +191,9 @@ namespace server_cs
         //=================================hien
 
 
-        //===============================huy
+        //=================================huy
 
 
-        //===========================nhan
+        //=================================nhan
     }
 }

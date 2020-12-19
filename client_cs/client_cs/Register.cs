@@ -25,7 +25,6 @@ namespace client_cs
         }
         IPEndPoint ip;
         Socket client_socket;
-        //ket noi toi sv
         void connect()
         {
             ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 2503);
@@ -43,14 +42,6 @@ namespace client_cs
             listen.IsBackground = true;
             listen.Start();
         }
-        void close()
-        {
-            client_socket.Close();
-        }
-        void send()
-        {
-
-        }
         void receive()
         {
             try
@@ -62,11 +53,11 @@ namespace client_cs
                     string message = (string)deserialize(data);
                     if (message == "true")
                     {
-                        Application.Run(new client());
+                        Application.Run(new Login_success());
                     }
                     else
                     {
-                        MessageBox.Show("This user is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("This user existed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
 
@@ -74,6 +65,7 @@ namespace client_cs
             catch
             {
                 MessageBox.Show("Disconnect from server", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                client_socket.Close();
             }
         }
         byte[] serialize(object obj)

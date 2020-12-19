@@ -17,14 +17,12 @@ namespace client_cs
 {
     public partial class Login : Form
     {
-        //tao form dang nhap
         public Login()
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
             connect();
         }
-        //tao event cho nut login
         private void login_button_Click(object sender, EventArgs e)
         {
             if (username_textBox.Text != string.Empty && password_textBox.Text != string.Empty)
@@ -34,13 +32,11 @@ namespace client_cs
             }
             else
             {
-                MessageBox.Show("This user is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Input is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        //khoi tao bien
         IPEndPoint ip;
         Socket client_socket;
-        //ket noi toi sv
         void connect()
         {
             ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 2503);
@@ -58,13 +54,6 @@ namespace client_cs
             listen.IsBackground = true;
             listen.Start();
         }
-        void close()
-        {
-            client_socket.Close();
-        }
-        void send()
-        {
-        }
         void receive()
         {
             try
@@ -76,7 +65,7 @@ namespace client_cs
                     string message = (string)deserialize(data);
                     if (message == "true")
                     {
-                        Application.Run(new client());
+                        Application.Run(new Login_success());
                     }
                     else
                     {
@@ -88,6 +77,7 @@ namespace client_cs
             catch
             {
                 MessageBox.Show("Disconnect from server", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                client_socket.Close();
             }
         }
         byte[] serialize(object obj)
