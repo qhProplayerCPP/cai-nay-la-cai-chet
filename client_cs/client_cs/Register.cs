@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace client_cs
 {
@@ -23,9 +16,11 @@ namespace client_cs
             CheckForIllegalCrossThreadCalls = false;
             connect();
         }
-        IPEndPoint ip;
-        Socket client_socket;
-        void connect()
+
+        private IPEndPoint ip;
+        private Socket client_socket;
+
+        private void connect()
         {
             ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 2503);
             client_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -42,7 +37,8 @@ namespace client_cs
             listen.IsBackground = true;
             listen.Start();
         }
-        void receive()
+
+        private void receive()
         {
             try
             {
@@ -53,14 +49,13 @@ namespace client_cs
                     string message = (string)deserialize(data);
                     if (message == "true")
                     {
-                        Application.Run(new Login_success());
+                        Application.Run(new Login_success(textBox1.Text));
                     }
                     else
                     {
                         MessageBox.Show("This user existed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-
             }
             catch
             {
@@ -68,19 +63,22 @@ namespace client_cs
                 client_socket.Close();
             }
         }
-        byte[] serialize(object obj)
+
+        private byte[] serialize(object obj)
         {
             MemoryStream stream = new MemoryStream();
             BinaryFormatter formatter = new BinaryFormatter();
             formatter.Serialize(stream, obj);
             return stream.ToArray();
         }
-        object deserialize(byte[] data)
+
+        private object deserialize(byte[] data)
         {
             MemoryStream stream = new MemoryStream(data);
             BinaryFormatter formatter = new BinaryFormatter();
             return formatter.Deserialize(stream);
-        }  
+        }
+
         private void register_button_Click_1(object sender, EventArgs e)
         {
             if (textBox1.Text != string.Empty && textBox2.Text != string.Empty && textBox3.Text != string.Empty && textBox4.Text != string.Empty)
@@ -90,7 +88,7 @@ namespace client_cs
             }
             else
             {
-                MessageBox.Show("This user is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Input is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

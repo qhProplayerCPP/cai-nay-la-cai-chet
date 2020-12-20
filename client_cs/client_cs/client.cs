@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading;
+using System.Windows.Forms;
 
 namespace client_cs
 {
@@ -24,14 +16,17 @@ namespace client_cs
             CheckForIllegalCrossThreadCalls = false;
             connect();
         }
+
         private void send_button_Click(object sender, EventArgs e)
         {
             send();
             add_message(type_box.Text);
         }
-        IPEndPoint ip;
-        Socket client_socket;
-        void connect()
+
+        private IPEndPoint ip;
+        private Socket client_socket;
+
+        private void connect()
         {
             ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 2503);
             client_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp); ;
@@ -48,16 +43,19 @@ namespace client_cs
             //listen.IsBackground = true;
             //listen.Start();
         }
-        void close()
+
+        private void close()
         {
             client_socket.Close();
         }
-        void send()
+
+        private void send()
         {
             if (type_box.Text != string.Empty)
-                client_socket.Send(serialize(type_box.Text)); 
+                client_socket.Send(serialize(type_box.Text));
         }
-        void receive()
+
+        private void receive()
         {
             try
             {
@@ -74,24 +72,28 @@ namespace client_cs
                 close();
             }
         }
-        void add_message(string s)
+
+        private void add_message(string s)
         {
             chat_box.Items.Add(new ListViewItem() { Text = "Client: " + s });
             type_box.Clear();
         }
-        void add_message_from_server(string s)
+
+        private void add_message_from_server(string s)
         {
             chat_box.Items.Add(new ListViewItem() { Text = "Server: " + s });
             type_box.Clear();
         }
-        byte[] serialize(object obj)
+
+        private byte[] serialize(object obj)
         {
             MemoryStream stream = new MemoryStream();
             BinaryFormatter formatter = new BinaryFormatter();
             formatter.Serialize(stream, obj);
             return stream.ToArray();
         }
-        object deserialize(byte[] data)
+
+        private object deserialize(byte[] data)
         {
             MemoryStream stream = new MemoryStream(data);
             BinaryFormatter formatter = new BinaryFormatter();
@@ -100,7 +102,6 @@ namespace client_cs
 
         private void client_Load(object sender, EventArgs e)
         {
-
         }
     }
 }
