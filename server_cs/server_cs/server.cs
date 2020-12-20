@@ -26,7 +26,7 @@ namespace server_cs
         {
             public Socket client;
             public string client_name;
-            private bool status;
+            public bool status;
 
             public void set_status(bool set)
             {
@@ -182,13 +182,13 @@ namespace server_cs
                 add_message("Dang o thread check");
                 if (info[0] == "online")
                 {
-                    for (int i = 0; i < client_list.Count(); i++)
-                    {
-                        if (client_list[i].client_name == info[1])
-                        {
-                            client_list[i].set_status(true);
-                        }
-                    }
+                    //for (int i = 0; i < client_list.Count(); i++)
+                    //{
+                    //    if (client_list[i].client_name == info[1])
+                    //    {
+                    //        client_list[i].set_status(true);
+                    //    }
+                    //}
                 }
                 else
                 {
@@ -204,6 +204,60 @@ namespace server_cs
                 foreach (CLIENT item in client_list)
                 {
                     add_message("Online " + item.client_name);
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+
+        private void chat_Huy(ref Socket client, string[] info)
+        {
+            try
+            {
+                bool check = false;
+                add_message("Dang o thread chat");
+                foreach (CLIENT item in client_list)
+                {
+                    if (item.client_name == info[2])
+                    {
+                        check = true;
+                        break;
+                    }
+                }
+                if (check == true)
+                {
+                    client.Send(serialize("online"));
+                }
+                else
+                {
+                    client.Send(serialize("offline"));
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+
+        private void send_message(ref Socket client, string message)
+        {
+            try
+            {
+                string[] info = message.Split('|');
+                string[] temp = info[0].Split(' ');
+                string text = info[2];
+                string sender = temp[1];
+                string receiver = info[1];
+                foreach(CLIENT item in client_list)
+                {
+                    if (item.client_name == receiver)
+                    {
+                        add_message("dang gui " + text);
+                        item.client.Send(serialize("message " + sender + "|" + receiver + "|" + text));
+                        break;
+                    }
                 }
             }
             catch
@@ -254,6 +308,24 @@ namespace server_cs
                                   });
                                   check_online.IsBackground = true;
                                   check_online.Start();
+                              }
+                              else if (info[0] == "chat")
+                              {
+                                  Thread chat = new Thread(() =>
+                                  {
+                                      chat_Huy(ref client, info);
+                                  });
+                                  chat.IsBackground = true;
+                                  chat.Start();
+                              }
+                              else if (info[0] == "message")
+                              {
+                                  Thread send = new Thread(() =>
+                                    {
+                                        send_message(ref client, message);
+                                    });
+                                  send.IsBackground = true;
+                                  send.Start();
                               }
                           }
                       }

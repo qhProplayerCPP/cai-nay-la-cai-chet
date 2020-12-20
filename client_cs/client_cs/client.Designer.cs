@@ -47,6 +47,7 @@ namespace client_cs
             // chat_box
             // 
             this.chat_box.Alignment = System.Windows.Forms.ListViewAlignment.Left;
+            this.chat_box.HideSelection = false;
             this.chat_box.LabelWrap = false;
             this.chat_box.Location = new System.Drawing.Point(12, 12);
             this.chat_box.Name = "chat_box";
@@ -58,11 +59,12 @@ namespace client_cs
             // 
             // type_box
             // 
+            this.type_box.AcceptsTab = true;
             this.type_box.Location = new System.Drawing.Point(13, 249);
             this.type_box.Multiline = true;
             this.type_box.Name = "type_box";
             this.type_box.Size = new System.Drawing.Size(283, 31);
-            this.type_box.TabIndex = 2;
+            this.type_box.TabIndex = 0;
             // 
             // client
             // 
