@@ -52,6 +52,18 @@
     <Compile Include="client.Designer.cs">
       <DependentUpon>client.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileHandler.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileHandler.Designer.cs">
+      <DependentUpon>FileHandler.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileList.Designer.cs">
+      <DependentUpon>FileList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,6 +76,12 @@
     <Compile Include="Login_success.Designer.cs">
       <DependentUpon>Login_success.cs</DependentUpon>
     </Compile>
+    <Compile Include="newfilename.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="newfilename.Designer.cs">
+      <DependentUpon>newfilename.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Register.cs">
@@ -75,11 +93,20 @@
     <EmbeddedResource Include="client.resx">
       <DependentUpon>client.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FileHandler.resx">
+      <DependentUpon>FileHandler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FileList.resx">
+      <DependentUpon>FileList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login_success.resx">
       <DependentUpon>Login_success.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="newfilename.resx">
+      <DependentUpon>newfilename.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

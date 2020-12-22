@@ -22,7 +22,7 @@ namespace client_cs
 
         private void connect()
         {
-            ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 2503);
+            ip = new IPEndPoint(IPAddress.Parse("192.168.1.3"), 2503);
             client_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
@@ -83,7 +83,7 @@ namespace client_cs
         {
             if (textBox1.Text != string.Empty && textBox2.Text != string.Empty && textBox3.Text != string.Empty && textBox4.Text != string.Empty)
             {
-                object message = "register " + textBox1.Text + " " + textBox2.Text + " " + textBox3.Text + " " + textBox4.Text;
+                object message = "register" + "|" + textBox1.Text + "|" + textBox2.Text + "|" + textBox3.Text + "|" + textBox4.Text;
                 client_socket.Send(serialize(message));
             }
             else
