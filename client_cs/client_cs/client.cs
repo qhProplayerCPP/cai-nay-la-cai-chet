@@ -28,7 +28,7 @@ namespace client_cs
 
         private void connect()
         {
-            ip = new IPEndPoint(IPAddress.Parse("192.168.1.3"), 2503);
+            ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 2503);
             client_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp); ;
             try
             {
@@ -42,11 +42,6 @@ namespace client_cs
             //Thread listen = new Thread(receive);
             //listen.IsBackground = true;
             //listen.Start();
-        }
-
-        private void close()
-        {
-            client_socket.Close();
         }
 
         private void send()
@@ -69,7 +64,7 @@ namespace client_cs
             }
             catch
             {
-                close();
+                client_socket.Close();
             }
         }
 

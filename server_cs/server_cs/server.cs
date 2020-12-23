@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Windows.Forms;
-using System;
-using System.Net.NetworkInformation;
-using System.Security.Cryptography;
-using System.Text;
+
 namespace server_cs
 {
     public partial class server : Form
@@ -134,7 +134,6 @@ namespace server_cs
             }
         }
 
-
         private void register(ref Socket client, string[] info)
         {
             CLIENT temp = new CLIENT();
@@ -215,6 +214,7 @@ namespace server_cs
                 client.Close();
             }
         }
+
         private void senddirectoryback(ref Socket client, string[] info)
         {
             try
@@ -237,6 +237,7 @@ namespace server_cs
                 client.Close();
             }
         }
+
         private void upload(ref Socket client, string[] info)
         {
             try
@@ -299,6 +300,7 @@ namespace server_cs
                 client.Close();
             }
         }
+
         private void download(ref Socket client, string[] info)
         {
             try
@@ -366,6 +368,7 @@ namespace server_cs
                 client.Close();
             }
         }
+
         private void receive()
         {
             while (true)
@@ -409,7 +412,7 @@ namespace server_cs
                                   check_online.IsBackground = true;
                                   check_online.Start();
                               }
-                              else if (info[0]=="DATA")
+                              else if (info[0] == "DATA")
                               {
                                   Thread upload_file = new Thread(() =>
                                   {
@@ -418,7 +421,7 @@ namespace server_cs
                                   upload_file.IsBackground = true;
                                   upload_file.Start();
                               }
-                              else if (info[0]=="GETLISTFILE")
+                              else if (info[0] == "GETLISTFILE")
                               {
                                   Thread repdir = new Thread(() =>
                                   {
@@ -427,7 +430,7 @@ namespace server_cs
                                   repdir.IsBackground = true;
                                   repdir.Start();
                               }
-                              else if (info[0]=="GETFILE")
+                              else if (info[0] == "GETFILE")
                               {
                                   Thread download_file = new Thread(() =>
                                   {
@@ -490,6 +493,7 @@ namespace server_cs
             }
             return mostSuitableIp != null ? mostSuitableIp.Address.ToString() : "";
         }
+
         private static readonly byte[] SALT = new byte[] { 0x26, 0xdc, 0xff, 0x00, 0xad, 0xed, 0x7a, 0xee, 0xc5, 0xfe, 0x07, 0xaf, 0x4d, 0x08, 0x22, 0x3c };
 
         public static byte[] encrypt(byte[] plain, string password)
