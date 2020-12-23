@@ -369,6 +369,38 @@ namespace server_cs
             }
         }
 
+        private void start_chat(ref Socket client, string[] info)
+        {
+            try
+            {
+                add_message("Dang o thread chat");
+                string sender = info[1];
+                string receiver = info[2];
+                bool check = false;
+                foreach(CLIENT item in client_list)
+                {
+                    if (item.client_name == receiver)
+                    {
+                        check = true;
+                        item.client.Send(serialize("chat|" + sender + "|" + receiver));
+                        break;
+                    }
+                }
+                if (check == false)
+                {
+                    client.Send(serialize("cannot|" + sender + "|" + receiver));
+                }
+                else
+                {
+                    client.Send(serialize("can|" + sender + "|" + receiver));
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+
         private void receive()
         {
             while (true)
@@ -438,6 +470,15 @@ namespace server_cs
                                   });
                                   download_file.IsBackground = true;
                                   download_file.Start();
+                              }
+                              else if (info[0] == "chat")
+                              {
+                                  Thread chat = new Thread(() =>
+                                  {
+                                      start_chat(ref client, info);
+                                  });
+                                  chat.IsBackground = true;
+                                  chat.Start();
                               }
                           }
                       }

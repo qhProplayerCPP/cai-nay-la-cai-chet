@@ -37,9 +37,9 @@ namespace client_cs
             }
 
             //==================huy
-            Thread check_online = new Thread(check_online_HUY);
-            check_online.IsBackground = true;
-            check_online.Start();
+            Thread receive_from_sv = new Thread(receive);
+            receive_from_sv.IsBackground = true;
+            receive_from_sv.Start();
             //=====================
         }
 
@@ -63,6 +63,95 @@ namespace client_cs
             this.Close();
         }
 
+        private void chat_button_Click_1(object sender, EventArgs e)
+        {
+            if (userchat_textBox.Text != string.Empty && userchat_textBox.Text != client_name)
+            {
+                client_socket.Send(serialize("chat|" + client_name + "|" + userchat_textBox.Text));
+            }
+            else
+            {
+                MessageBox.Show("Input invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void is_chat(ref Socket client, string[] info)
+        {
+            try
+            {
+                string sender = info[1];
+                string receiver = info[2];
+                if (info[0] == "can")
+                {
+                    Application.Run(new client(sender, receiver));
+                }
+                else
+                {
+                    MessageBox.Show("This user doesnot online/exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+
+        private void chat_box(ref Socket client, string[] info)
+        {
+            try
+            {
+
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+
+        private void receive()
+        {
+            Thread check_online = new Thread(check_online_HUY);
+            check_online.IsBackground = true;
+            check_online.Start();
+            Thread receive = new Thread(() =>
+            {
+                try
+                {
+                    while (true)
+                    {
+                        byte[] data = new byte[1024 * 5000];
+                        client_socket.Receive(data);
+                        string message = (string)deserialize(data);
+                        string[] info = message.Split('|');
+                        if (info[0] == "can" || info[0] == "cannot")
+                        {
+                            Thread check_chat = new Thread(() =>
+                            {
+                                is_chat(ref client_socket, info);
+                            });
+                            check_chat.IsBackground = true;
+                            check_chat.Start();
+                        }
+                        else if (info[0] == "chat")
+                        {
+                            Thread open = new Thread(() =>
+                              {
+                                  chat_box(ref client_socket, info);
+                              });
+                            open.IsBackground = true;
+                            open.Start();
+                        }
+                    }
+                }
+                catch
+                {
+                    client_socket.Close();
+                }
+            });
+            receive.IsBackground = true;
+            receive.Start();
+        }
+
         //=================================
         private byte[] serialize(object obj)
         {
@@ -77,10 +166,6 @@ namespace client_cs
             MemoryStream stream = new MemoryStream(data);
             BinaryFormatter formatter = new BinaryFormatter();
             return formatter.Deserialize(stream);
-        }
-
-        private void chat_button_click(object sender, EventArgs e)
-        {
         }
 
         private void changepass_button_Click(object sender, EventArgs e)

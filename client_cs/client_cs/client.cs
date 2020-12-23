@@ -10,10 +10,12 @@ namespace client_cs
     public partial class client : Form
     {
         //cai nay chua dung toi nhieu
-        public client()
+        public client(string s, string r)
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
+            sender = s;
+            receiver = r;
             connect();
         }
 
@@ -25,7 +27,7 @@ namespace client_cs
 
         private IPEndPoint ip;
         private Socket client_socket;
-
+        string sender, receiver;
         private void connect()
         {
             ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 2503);
@@ -70,13 +72,13 @@ namespace client_cs
 
         private void add_message(string s)
         {
-            chat_box.Items.Add(new ListViewItem() { Text = "Client: " + s });
+            chat_box.Items.Add(new ListViewItem() { Text = s });
             type_box.Clear();
         }
 
         private void add_message_from_server(string s)
         {
-            chat_box.Items.Add(new ListViewItem() { Text = "Server: " + s });
+            chat_box.Items.Add(new ListViewItem() { Text = s });
             type_box.Clear();
         }
 
