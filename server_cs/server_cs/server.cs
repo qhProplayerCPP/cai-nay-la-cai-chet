@@ -215,159 +215,7 @@ namespace server_cs
             }
         }
 
-        private void senddirectoryback(ref Socket client, string[] info)
-        {
-            try
-            {
-                add_message("Dang o thread download 1");
-                if (info[0] == "GETLISTFILE")
-                {
-                    for (int i = 0; i < client_list.Count(); i++)
-                    {
-                        if (client_list[i].client_name == info[1])
-                        {
-                            string[] file = Directory.GetFiles(@"files\");
-                            client_list[i].client.Send(serialize("LISTFILE" + "|" + string.Join("$", file)));
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                client.Close();
-            }
-        }
-
-        private void upload(ref Socket client, string[] info)
-        {
-            try
-            {
-                add_message("Dang o thread upload");
-                if (info[0] == "DATA")
-                {
-                    for (int i = 0; i < client_list.Count(); i++)
-                    {
-                        if (client_list[i].client_name == info[1])
-                        {
-                            var receiveThread = new Thread(filename =>
-                            {
-                                var cmd = ((string)filename).Split('|');
-                                var listener = new TcpListener(IPAddress.Parse(GetLocalIpAddress()), 2503);
-                                var bufferSize = 1024;
-                                var bytesRead = 0;
-                                var allBytesRead = 0;
-
-                                // Start listening
-                                listener.Start();
-
-                                // Accept client
-                                var Client = listener.AcceptTcpClient();
-                                listener.Stop();
-                                var netStream = Client.GetStream();
-
-                                // Read length of incoming data
-                                var length = new byte[4];
-                                bytesRead = netStream.Read(length, 0, 4);
-                                var dataLength = BitConverter.ToInt32(length, 0);
-
-                                // Read the data
-                                var bytesLeft = dataLength;
-                                var datas = new byte[dataLength];
-
-                                while (bytesLeft > 0)
-                                {
-                                    var nextPacketSize = bytesLeft > bufferSize ? bufferSize : bytesLeft;
-                                    bytesRead = netStream.Read(datas, allBytesRead, nextPacketSize);
-                                    allBytesRead += bytesRead;
-                                    bytesLeft -= bytesRead;
-                                }
-
-                                if (cmd[1] == "Y")
-                                    datas = decrypt(datas, "dcmongtule");
-                                // Save to files
-                                File.WriteAllBytes("files\\" + (string)cmd[0], datas);
-                                // Clean up
-                                netStream.Close();
-                                Client.Close();
-                            });
-                            receiveThread.Start(info[2] + "|" + info[3]);
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                client.Close();
-            }
-        }
-
-        private void download(ref Socket client, string[] info)
-        {
-            try
-            {
-                add_message("Dang o thread download 2");
-                if (info[0] == "GETFILE")
-                {
-                    for (int i = 0; i < client_list.Count(); i++)
-                    {
-                        if (client_list[i].client_name == info[1])
-                        {
-                            Thread sendThread = new Thread(() =>
-                            {
-                                string[] cmd = ((string)info[2]).Split('|');
-                                var ipAddress = IPAddress.Parse(cmd[2]);
-                                var port = 2503;
-                                var bufferSize = 1024;
-                                var client_ = new TcpClient();
-                                try
-                                {
-                                    client_.Connect(new IPEndPoint(ipAddress, port));
-                                }
-                                catch
-                                {
-                                    client_.Close();
-                                    return;
-                                }
-
-                                var netStream = client_.GetStream();
-                                var datas = File.ReadAllBytes("files\\" + cmd[0]);
-                                if (cmd[2] == "Y")
-                                    datas = encrypt(datas, "dcmongtule");
-                                // Build the package
-                                var dataLength = BitConverter.GetBytes(datas.Length);
-                                var package = new byte[4 + datas.Length];
-                                dataLength.CopyTo(package, 0);
-                                datas.CopyTo(package, 4);
-
-                                // Send to server
-                                var bytesSent = 0;
-                                var bytesLeft = package.Length;
-
-                                while (bytesLeft > 0)
-                                {
-                                    var nextPacketSize = bytesLeft > bufferSize ? bufferSize : bytesLeft;
-
-                                    netStream.Write(package, bytesSent, nextPacketSize);
-                                    bytesSent += nextPacketSize;
-                                    bytesLeft -= nextPacketSize;
-                                }
-
-                                netStream.Flush();
-                                netStream.Dispose();
-                                netStream.Close();
-                                client_.Close();
-                                client_.Dispose();
-                            });
-                            sendThread.Start(info[2] + "|" + info[3] + "|" + info[4]);
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                client.Close();
-            }
-        }
+     
 
         private void start_chat(ref Socket client, string[] info)
         {
@@ -452,15 +300,6 @@ namespace server_cs
                                   });
                                   upload_file.IsBackground = true;
                                   upload_file.Start();
-                              }
-                              else if (info[0] == "GETLISTFILE")
-                              {
-                                  Thread repdir = new Thread(() =>
-                                  {
-                                      senddirectoryback(ref client, info);
-                                  });
-                                  repdir.IsBackground = true;
-                                  repdir.Start();
                               }
                               else if (info[0] == "GETFILE")
                               {
@@ -566,5 +405,142 @@ namespace server_cs
             cryptoStream.Close();
             return memoryStream.ToArray();
         }
+        private void upload(ref Socket client, string[] info)
+        {
+            try
+            {
+                add_message("Dang o thread upload");
+                if (info[0] == "DATA")
+                {
+                    for (int i = 0; i < client_list.Count(); i++)
+                    {
+                        if (client_list[i].client_name == info[1])
+                        {
+                            var receiveThread = new Thread(filename =>
+                            {
+                                var cmd = ((string)filename).Split('|');
+                                var listener = new TcpListener(IPAddress.Parse(GetLocalIpAddress()), 2503);
+                                var bufferSize = 1024;
+                                var bytesRead = 0;
+                                var allBytesRead = 0;
+
+                                // Start listening
+                                listener.Start();
+
+                                // Accept client
+                                var Client = listener.AcceptTcpClient();
+                                listener.Stop();
+                                var netStream = Client.GetStream();
+
+                                // Read length of incoming data
+                                var length = new byte[4];
+                                bytesRead = netStream.Read(length, 0, 4);
+                                var dataLength = BitConverter.ToInt32(length, 0);
+
+                                // Read the data
+                                var bytesLeft = dataLength;
+                                var datas = new byte[dataLength];
+
+                                while (bytesLeft > 0)
+                                {
+                                    var nextPacketSize = bytesLeft > bufferSize ? bufferSize : bytesLeft;
+                                    bytesRead = netStream.Read(datas, allBytesRead, nextPacketSize);
+                                    allBytesRead += bytesRead;
+                                    bytesLeft -= bytesRead;
+                                }
+
+                                if (cmd[1] == "Y")
+                                    datas = decrypt(datas, "dcmongtule");
+                                // Save to files
+                                File.WriteAllBytes("files\\" + (string)cmd[0], datas);
+                                // Clean up
+                                netStream.Close();
+                                Client.Close();
+                            });
+                            receiveThread.Start(info[2] + "|" + info[3]);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+        private void download(ref Socket client, string[] info)
+        {
+            try
+            {
+                add_message("Dang o thread download ");
+                if (info[0] == "GETFILE")
+                {
+                    for (int i = 0; i < client_list.Count(); i++)
+                    {
+                        if (client_list[i].client_name == info[1])
+                        {
+                            if (System.IO.File.Exists("files\\" + info[2]))
+                            {
+                                Thread sendThread = new Thread(() =>
+                                {
+
+                                    var ipAddress = IPAddress.Parse(info[3]);
+                                    var port = 2504;
+                                    var bufferSize = 1024;
+                                    var client_ = new TcpClient();
+                                    try
+                                    {
+                                        client_.Connect(new IPEndPoint(ipAddress, port));
+                                    }
+                                    catch
+                                    {
+                                        client_.Close();
+                                        return;
+                                    }
+                                    var netStream = client_.GetStream();
+                                    var datas = File.ReadAllBytes("files\\" + info[2]);
+                                    if (info[4] == "Y")
+                                        datas = encrypt(datas, "dcmongtule");
+                                    // Build the package
+                                    var dataLength = BitConverter.GetBytes(datas.Length);
+                                    var package = new byte[4 + datas.Length];
+                                    dataLength.CopyTo(package, 0);
+                                    datas.CopyTo(package, 4);
+
+                                    // Send to server
+                                    var bytesSent = 0;
+                                    var bytesLeft = package.Length;
+
+                                    while (bytesLeft > 0)
+                                    {
+                                        var nextPacketSize = bytesLeft > bufferSize ? bufferSize : bytesLeft;
+
+                                        netStream.Write(package, bytesSent, nextPacketSize);
+                                        bytesSent += nextPacketSize;
+                                        bytesLeft -= nextPacketSize;
+                                    }
+
+                                    netStream.Flush();
+                                    netStream.Dispose();
+                                    netStream.Close();
+                                    client_.Close();
+                                    client_.Dispose();
+                                });
+                                sendThread.Start();
+                            }
+                            else
+                            {
+                                //ff
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+
     }
 }

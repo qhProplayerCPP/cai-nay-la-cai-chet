@@ -216,34 +216,23 @@ namespace client_cs
         }
         private void downloadbutton_Click(object sender, EventArgs e)
         {
-            client_socket.Send(serialize("GETLISTFILE" + "|" + client_name));
-            byte[] data = new byte[1024 * 5000];
-            string message;
-            while (data != null)
+            var ndownfile = new SaveFile { StartPosition = FormStartPosition.CenterParent };
+            if (ndownfile.ShowDialog(this) == DialogResult.OK)
             {
-                client_socket.Receive(data);
-            }
-            
-            message = (string)deserialize(data);
-            var dataArray = message.Split('|');
-            if (dataArray[0] == "LISTFILE")
-            {
-                string[] files = dataArray[1].Split('$');
-                var frmListFile = new FileList { StartPosition = FormStartPosition.CenterParent };
-                foreach (var item in files)
+                if (ndownfile.filenametxb.Text == string.Empty)
                 {
-                    if (item != string.Empty)
-                        frmListFile.listboxlistfile.Items.Add(item.Substring(item.IndexOf('\\') + 1));
+                    MessageBox.Show("No blank!", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
-
-                if (frmListFile.ShowDialog(this) == DialogResult.OK)
+                else
                 {
                     var dialogResult = MessageBox.Show(this, "Do you want to encrypt before downloading?", "Notification", MessageBoxButtons.YesNo);
-                    client_socket.Send(serialize("GETFILE" + "|" + client_name + "|" + (frmListFile.listboxlistfile.GetItemText(frmListFile.listboxlistfile.SelectedItem)) + "|" + GetLocalIpAddress() + "|" + (dialogResult == DialogResult.Yes ? "Y" : "N")));
-                    var receiveThread = new Thread(filename =>
+                    string message = "GETFILE" + "|" + client_name + "|" + ndownfile.filenametxb.Text + "|" + GetLocalIpAddress() + "|" + (dialogResult == DialogResult.Yes ? "Y" : "N");
+                    client_socket.Send(serialize(message));
+                    var receiveThread = new Thread(() =>
                     {
-                        var cmd = ((string)filename).Split('|');
-                        var listener = new TcpListener(IPAddress.Parse("192.168.1.3"), 2505);
+                        var cmd = ((string)message).Split('|');
+                        var listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 2504);
                         var bufferSize = 1024;
                         var bytesRead = 0;
                         var allBytesRead = 0;
@@ -273,25 +262,29 @@ namespace client_cs
                             bytesLeft -= bytesRead;
                         }
 
-                        if (cmd[1] == "Y")
-                            datas = decrypt(datas, "dcmongtule"); 
+                        if (cmd[4] == "Y")
+                        {
+                            datas = decrypt(datas, "dcmongtule");
+                        }
+
                         // Save to files
                         var frmNewName = new newfilename { StartPosition = FormStartPosition.CenterParent };
-                        if (frmNewName.ShowDialog(this) == DialogResult.Yes &&
-                            frmNewName.Text.Trim() != string.Empty)
+                        if (frmNewName.ShowDialog(this) == DialogResult.OK && frmNewName.textboxnewname.Text.Trim() != string.Empty)
                         {
-                            if (cmd[0].Contains('.'))
-                                cmd[0] = cmd[0].Substring(cmd[0].LastIndexOf('.'));
-                            cmd[0] = frmNewName.textboxnewname.Text.Trim() + cmd[0];
+                            if (cmd[2].Contains('.'))
+                                cmd[2] = cmd[2].Substring(cmd[2].LastIndexOf('.'));
+                            cmd[2] = frmNewName.textboxnewname.Text.Trim() + cmd[2];
                         }
                         else
+                        {
                             MessageBox.Show(this, "New Name is invalid. Old file name is kept", "Notification", MessageBoxButtons.OK);
-                        File.WriteAllBytes("received\\" + cmd[0], datas);
+                        }
+                        File.WriteAllBytes("received\\" + cmd[2], datas);
                         // Clean up
                         netStream.Close();
                         client.Close();
                     });
-                    receiveThread.Start((frmListFile.textboxnewname.Text != string.Empty ? frmListFile.textboxnewname.Text : (string)frmListFile.listboxlistfile.SelectedItem) + "|" + (dialogResult == DialogResult.Yes ? "Y" : "N"));
+                    receiveThread.Start();
                 }
             }
         }
