@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Messaging" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,11 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="client.cs">
+    <Compile Include="Client.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="client.Designer.cs">
-      <DependentUpon>client.cs</DependentUpon>
+    <Compile Include="Client.Designer.cs">
+      <DependentUpon>Client.cs</DependentUpon>
     </Compile>
     <Compile Include="FileHandler.cs">
       <SubType>Form</SubType>
@@ -90,9 +91,6 @@
     <Compile Include="SaveFile.designer.cs">
       <DependentUpon>SaveFile.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="client.resx">
-      <DependentUpon>client.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FileHandler.resx">
       <DependentUpon>FileHandler.cs</DependentUpon>
     </EmbeddedResource>

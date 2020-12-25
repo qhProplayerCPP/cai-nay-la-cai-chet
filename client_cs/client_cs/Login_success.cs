@@ -35,7 +35,6 @@ namespace client_cs
                 MessageBox.Show("Cant connect to server!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
             //==================huy
             Thread receive_from_sv = new Thread(receive);
             receive_from_sv.IsBackground = true;
@@ -44,7 +43,7 @@ namespace client_cs
         }
 
         //==============================huy
-        private void check_online_HUY()
+        private void Login_success_Load(object sender, EventArgs e)
         {
             try
             {
@@ -55,12 +54,6 @@ namespace client_cs
                 MessageBox.Show("Disconnect from server", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 client_socket.Close();
             }
-        }
-
-        private void quit_button_Click(object sender, EventArgs e)
-        {
-            client_socket.Send(serialize("offline" + "|" + client_name));
-            this.Close();
         }
 
         private void chat_button_Click_1(object sender, EventArgs e)
@@ -75,44 +68,21 @@ namespace client_cs
             }
         }
 
-        private void is_chat(ref Socket client, string[] info)
+        private void Login_success_FormClosed(object sender, FormClosedEventArgs e)
         {
             try
             {
-                string sender = info[1];
-                string receiver = info[2];
-                if (info[0] == "can")
-                {
-                    Application.Run(new client(sender, receiver));
-                }
-                else
-                {
-                    MessageBox.Show("This user doesnot online/exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                client_socket.Send(serialize("offline" + "|" + client_name));
             }
             catch
             {
-                client.Close();
-            }
-        }
-
-        private void chat_box(ref Socket client, string[] info)
-        {
-            try
-            {
-
-            }
-            catch
-            {
-                client.Close();
+                MessageBox.Show("Disconnect from server", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                client_socket.Close();
             }
         }
 
         private void receive()
         {
-            Thread check_online = new Thread(check_online_HUY);
-            check_online.IsBackground = true;
-            check_online.Start();
             Thread receive = new Thread(() =>
             {
                 try
@@ -123,23 +93,18 @@ namespace client_cs
                         client_socket.Receive(data);
                         string message = (string)deserialize(data);
                         string[] info = message.Split('|');
-                        if (info[0] == "can" || info[0] == "cannot")
+                        if (info[0] == "chat")
                         {
-                            Thread check_chat = new Thread(() =>
-                            {
-                                is_chat(ref client_socket, info);
-                            });
-                            check_chat.IsBackground = true;
-                            check_chat.Start();
-                        }
-                        else if (info[0] == "chat")
-                        {
-                            Thread open = new Thread(() =>
+                            Thread chat_thread = new Thread(() =>
                               {
-                                  chat_box(ref client_socket, info);
+                                  Application.Run(new Client(info[1], info[2]));
                               });
-                            open.IsBackground = true;
-                            open.Start();
+                            chat_thread.IsBackground = true;
+                            chat_thread.Start();
+                        }
+                        else if (info[0] == "cantchat")
+                        {
+                            MessageBox.Show("This user does not online/exist");
                         }
                     }
                 }

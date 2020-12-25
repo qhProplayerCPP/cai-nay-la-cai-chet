@@ -34,7 +34,6 @@ namespace client_cs
             this.setup_button = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.userchat_textBox = new System.Windows.Forms.TextBox();
-            this.quit_button = new System.Windows.Forms.Button();
             this.buttonFile = new System.Windows.Forms.Button();
             this.chat_button = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -85,20 +84,10 @@ namespace client_cs
             this.userchat_textBox.Size = new System.Drawing.Size(115, 20);
             this.userchat_textBox.TabIndex = 0;
             // 
-            // quit_button
-            // 
-            this.quit_button.Location = new System.Drawing.Point(70, 278);
-            this.quit_button.Name = "quit_button";
-            this.quit_button.Size = new System.Drawing.Size(117, 23);
-            this.quit_button.TabIndex = 6;
-            this.quit_button.Text = "Quit";
-            this.quit_button.UseVisualStyleBackColor = true;
-            this.quit_button.Click += new System.EventHandler(this.quit_button_Click);
-            // 
             // buttonFile
             // 
             this.buttonFile.Location = new System.Drawing.Point(70, 235);
-            this.buttonFile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonFile.Margin = new System.Windows.Forms.Padding(2);
             this.buttonFile.Name = "buttonFile";
             this.buttonFile.Size = new System.Drawing.Size(117, 26);
             this.buttonFile.TabIndex = 5;
@@ -121,10 +110,9 @@ namespace client_cs
             this.AcceptButton = this.chat_button;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(257, 341);
+            this.ClientSize = new System.Drawing.Size(256, 286);
             this.Controls.Add(this.chat_button);
             this.Controls.Add(this.buttonFile);
-            this.Controls.Add(this.quit_button);
             this.Controls.Add(this.userchat_textBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.setup_button);
@@ -132,6 +120,8 @@ namespace client_cs
             this.Controls.Add(this.changepass_button);
             this.Name = "Login_success";
             this.Text = "Client";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Login_success_FormClosed);
+            this.Load += new System.EventHandler(this.Login_success_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -144,7 +134,6 @@ namespace client_cs
         private System.Windows.Forms.Button setup_button;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox userchat_textBox;
-        private System.Windows.Forms.Button quit_button;
         private System.Windows.Forms.Button buttonFile;
         private System.Windows.Forms.Button chat_button;
     }

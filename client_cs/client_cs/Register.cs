@@ -83,7 +83,8 @@ namespace client_cs
         {
             if (textBox1.Text != string.Empty && textBox2.Text != string.Empty && textBox3.Text != string.Empty && textBox4.Text != string.Empty)
             {
-                object message = "register" + "|" + textBox1.Text + "|" + textBox2.Text + "|" + textBox3.Text + "|" + textBox4.Text;
+                IPAddress[] iptemp = Dns.GetHostAddresses(Dns.GetHostName());
+                object message = "register" + "|" + textBox1.Text + "|" + textBox2.Text + "|" + textBox3.Text + "|" + textBox4.Text + "|" + iptemp[1].ToString();
                 client_socket.Send(serialize(message));
             }
             else

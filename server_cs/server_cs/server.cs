@@ -29,15 +29,11 @@ namespace server_cs
         {
             public Socket client;
             public string client_name;
-            private bool status;
-
-            public void set_status(bool set)
-            {
-                status = set;
-            }
+            public string ip_address;
         }
 
         private List<user_info> all_users;
+        private List<CLIENT> chat_list;
 
         private struct user_info
         {
@@ -45,23 +41,6 @@ namespace server_cs
             public string password;
             public string fullname;
             public string dob;
-        }
-
-        private void get_data(ref List<user_info> all_users)
-        {
-            all_users = new List<user_info>();
-            using (StreamReader fin = new StreamReader("database.txt"))
-            {
-                while (!fin.EndOfStream)
-                {
-                    user_info temp;
-                    temp.username = fin.ReadLine();
-                    temp.password = fin.ReadLine();
-                    temp.fullname = fin.ReadLine();
-                    temp.dob = fin.ReadLine();
-                    all_users.Add(temp);
-                }
-            }
         }
 
         private void connect()
@@ -97,9 +76,25 @@ namespace server_cs
         //=================================hien
 
         //=================================huy
+        private void get_data(ref List<user_info> all_users)
+        {
+            all_users = new List<user_info>();
+            using (StreamReader fin = new StreamReader("database.txt"))
+            {
+                while (!fin.EndOfStream)
+                {
+                    user_info temp;
+                    temp.username = fin.ReadLine();
+                    temp.password = fin.ReadLine();
+                    temp.fullname = fin.ReadLine();
+                    temp.dob = fin.ReadLine();
+                    all_users.Add(temp);
+                }
+            }
+        }
+
         private void login(ref Socket client, string[] info)
         {
-            CLIENT temp = new CLIENT();
             try
             {
                 get_data(ref all_users);
@@ -116,10 +111,7 @@ namespace server_cs
                 if (check == true)
                 {
                     client.Send(serialize("true"));
-                    temp.client = client;
-                    temp.client_name = info[1];
-                    client_list.Add(temp);
-                    string login_notice = "User " + temp.client_name + " connected!";
+                    string login_notice = "User " + info[1] + " connected!";
                     add_message(login_notice);
                 }
                 else
@@ -129,14 +121,12 @@ namespace server_cs
             }
             catch
             {
-                client_list.Remove(temp);
                 client.Close();
             }
         }
 
         private void register(ref Socket client, string[] info)
         {
-            CLIENT temp = new CLIENT();
             try
             {
                 get_data(ref all_users);
@@ -164,36 +154,22 @@ namespace server_cs
                         sw.WriteLine(info[3]);
                         sw.WriteLine(info[4]);
                     }
-                    temp.client = client;
-                    temp.client_name = info[1];
-                    client_list.Add(temp);
-                    string login_notice = "User " + temp.client_name + " connected!";
+                    string login_notice = "User " + info[1] + " connected!";
                     add_message(login_notice);
                 }
             }
             catch
             {
-                client_list.Remove(temp);
                 client.Close();
             }
         }
 
-        private void check_online_user(ref Socket client, string[] info)
+        private void check_online_user(ref List<CLIENT> client_list, ref Socket client, string[] info)
         {
             try
             {
                 add_message("Dang o thread check");
-                if (info[0] == "online")
-                {
-                    for (int i = 0; i < client_list.Count(); i++)
-                    {
-                        if (client_list[i].client_name == info[1])
-                        {
-                            client_list[i].set_status(true);
-                        }
-                    }
-                }
-                else
+                if (info[0] == "offline")
                 {
                     for (int i = 0; i < client_list.Count(); i++)
                     {
@@ -203,6 +179,13 @@ namespace server_cs
                             i--;
                         }
                     }
+                }
+                else
+                {
+                    CLIENT temp = new CLIENT();
+                    temp.client = client;
+                    temp.client_name = info[1];
+                    client_list.Add(temp);
                 }
                 foreach (CLIENT item in client_list)
                 {
@@ -215,32 +198,37 @@ namespace server_cs
             }
         }
 
-     
-
-        private void start_chat(ref Socket client, string[] info)
+        private void chat_function(ref List<CLIENT> client_list, ref Socket client, string[] info)
         {
             try
             {
                 add_message("Dang o thread chat");
-                string sender = info[1];
-                string receiver = info[2];
                 bool check = false;
-                foreach(CLIENT item in client_list)
+                foreach (CLIENT item in client_list)
                 {
-                    if (item.client_name == receiver)
+                    if (item.client_name == info[2])
                     {
                         check = true;
-                        item.client.Send(serialize("chat|" + sender + "|" + receiver));
                         break;
                     }
                 }
-                if (check == false)
+                if (check == true)
                 {
-                    client.Send(serialize("cannot|" + sender + "|" + receiver));
+                    foreach (CLIENT item in client_list)
+                    {
+                        if (item.client_name == info[1])
+                        {
+                            item.client.Send(serialize("chat|" + info[1] + "|" + info[2]));
+                        }
+                        else if (item.client_name == info[2])
+                        {
+                            item.client.Send(serialize("chat|" + info[2] + "|" + info[1]));
+                        }
+                    }
                 }
                 else
                 {
-                    client.Send(serialize("can|" + sender + "|" + receiver));
+                    client.Send(serialize("cantchat|" + info[1] + "|" + info[2]));
                 }
             }
             catch
@@ -287,7 +275,7 @@ namespace server_cs
                               {
                                   Thread check_online = new Thread(() =>
                                   {
-                                      check_online_user(ref client, info);
+                                      check_online_user(ref client_list, ref client, info);
                                   });
                                   check_online.IsBackground = true;
                                   check_online.Start();
@@ -312,12 +300,12 @@ namespace server_cs
                               }
                               else if (info[0] == "chat")
                               {
-                                  Thread chat = new Thread(() =>
-                                  {
-                                      start_chat(ref client, info);
-                                  });
-                                  chat.IsBackground = true;
-                                  chat.Start();
+                                  Thread chat_thread = new Thread(() =>
+                                    {
+                                        chat_function(ref client_list, ref client, info);
+                                    });
+                                  chat_thread.IsBackground = true;
+                                  chat_thread.Start();
                               }
                           }
                       }
@@ -405,6 +393,7 @@ namespace server_cs
             cryptoStream.Close();
             return memoryStream.ToArray();
         }
+
         private void upload(ref Socket client, string[] info)
         {
             try
@@ -467,6 +456,7 @@ namespace server_cs
                 client.Close();
             }
         }
+
         private void download(ref Socket client, string[] info)
         {
             try
@@ -482,7 +472,6 @@ namespace server_cs
                             {
                                 Thread sendThread = new Thread(() =>
                                 {
-
                                     var ipAddress = IPAddress.Parse(info[3]);
                                     var port = 2504;
                                     var bufferSize = 1024;
@@ -531,7 +520,6 @@ namespace server_cs
                             {
                                 //ff
                             }
-
                         }
                     }
                 }
@@ -541,6 +529,5 @@ namespace server_cs
                 client.Close();
             }
         }
-
     }
 }

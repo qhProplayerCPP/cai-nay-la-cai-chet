@@ -21,7 +21,8 @@ namespace client_cs
         {
             if (username_textBox.Text != string.Empty && password_textBox.Text != string.Empty)
             {
-                object message = "login" + "|" + username_textBox.Text + "|" + password_textBox.Text;
+                IPAddress[] iptemp = Dns.GetHostAddresses(Dns.GetHostName());
+                object message = "login" + "|" + username_textBox.Text + "|" + password_textBox.Text + "|" + iptemp[1].ToString();
                 client_socket.Send(serialize(message));
             }
             else
