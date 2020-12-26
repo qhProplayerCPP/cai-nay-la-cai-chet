@@ -22,6 +22,7 @@ namespace client_cs
         private Socket client_socket;
         private string client_name;
 
+        //==============================huy
         private void connect()
         {
             ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 2503);
@@ -42,11 +43,11 @@ namespace client_cs
             //=====================
         }
 
-        //==============================huy
         private void Login_success_Load(object sender, EventArgs e)
         {
             try
             {
+                this.Text = client_name;
                 client_socket.Send(serialize("online" + "|" + client_name));
             }
             catch
@@ -117,7 +118,6 @@ namespace client_cs
             receive.Start();
         }
 
-        //=================================
         private byte[] serialize(object obj)
         {
             MemoryStream stream = new MemoryStream();
@@ -139,6 +139,7 @@ namespace client_cs
             ChangePass form = new ChangePass();
             form.ShowDialog();
         }
+
         //==================================
 
         private void setup_button_Click(object sender, EventArgs e)

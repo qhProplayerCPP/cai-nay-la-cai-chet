@@ -24,16 +24,15 @@ namespace server_cs
         private IPEndPoint ip;
         private Socket server_socket;
         private List<CLIENT> client_list;
+        private List<CLIENT> chat_list;
+        private List<user_info> all_users;
 
         private struct CLIENT
         {
             public Socket client;
             public string client_name;
-            public string ip_address;
+            public string receive_name;
         }
-
-        private List<user_info> all_users;
-        private List<CLIENT> chat_list;
 
         private struct user_info
         {
@@ -43,34 +42,8 @@ namespace server_cs
             public string dob;
         }
 
-        private void connect()
+        private void chat_box_SelectedIndexChanged(object sender, EventArgs e)
         {
-            client_list = new List<CLIENT>();
-            ip = new IPEndPoint(IPAddress.Any, 2503);
-            server_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp); ;
-            server_socket.Bind(ip);
-            server_socket.Listen(50);
-
-            //======================huy
-            Thread receive_from_client = new Thread(receive);
-            receive_from_client.IsBackground = true;
-            receive_from_client.Start();
-            //=========================
-        }
-
-        private byte[] serialize(object obj)
-        {
-            MemoryStream stream = new MemoryStream();
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, obj);
-            return stream.ToArray();
-        }
-
-        private object deserialize(byte[] data)
-        {
-            MemoryStream stream = new MemoryStream(data);
-            BinaryFormatter formatter = new BinaryFormatter();
-            return formatter.Deserialize(stream);
         }
 
         //=================================hien
@@ -113,7 +86,38 @@ namespace server_cs
                 client.Close();
             }
         }
+
         //=================================huy
+
+        private void connect()
+        {
+            client_list = new List<CLIENT>();
+            chat_list = new List<CLIENT>();
+            ip = new IPEndPoint(IPAddress.Any, 2503);
+            server_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp); ;
+            server_socket.Bind(ip);
+            server_socket.Listen(100);
+
+            Thread receive_from_client = new Thread(receive);
+            receive_from_client.IsBackground = true;
+            receive_from_client.Start();
+        }
+
+        private byte[] serialize(object obj)
+        {
+            MemoryStream stream = new MemoryStream();
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(stream, obj);
+            return stream.ToArray();
+        }
+
+        private object deserialize(byte[] data)
+        {
+            MemoryStream stream = new MemoryStream(data);
+            BinaryFormatter formatter = new BinaryFormatter();
+            return formatter.Deserialize(stream);
+        }
+
         private void get_data(ref List<user_info> all_users)
         {
             all_users = new List<user_info>();
@@ -137,16 +141,25 @@ namespace server_cs
             {
                 get_data(ref all_users);
                 add_message("Dang o thread login");
-                bool check = false;
+                bool check1 = false;
+                bool check2 = true;
                 foreach (user_info item in all_users)
                 {
                     if (item.username == info[1] && item.password == info[2])
                     {
-                        check = true;
+                        check1 = true;
                         break;
                     }
                 }
-                if (check == true)
+                foreach (CLIENT item in client_list)
+                {
+                    if (item.client_name == info[1])
+                    {
+                        check2 = false;
+                        break;
+                    }
+                }
+                if (check1 == true && check2 == true)
                 {
                     client.Send(serialize("true"));
                     string login_notice = "User " + info[1] + " connected!";
@@ -275,6 +288,74 @@ namespace server_cs
             }
         }
 
+        private void chatbox_function(ref List<CLIENT> chat_list, ref Socket client, string[] info)
+        {
+            try
+            {
+                add_message("Dang o thread chatbox");
+                if (info[0] == "on_chatbox")
+                {
+                    CLIENT temp = new CLIENT();
+                    temp.client = client;
+                    temp.client_name = info[1];
+                    temp.receive_name = info[2];
+                    chat_list.Add(temp);
+                }
+                else
+                {
+                    foreach (CLIENT item in chat_list)
+                    {
+                        if (item.client_name == info[1] && item.receive_name == info[2])
+                        {
+                            chat_list.Remove(item);
+                            break;
+                        }
+                    }
+                }
+                foreach (CLIENT item in chat_list)
+                {
+                    add_message("Chat box open: " + item.client_name + " " + item.receive_name);
+                }
+            }
+            catch
+            {
+                //client.Close();
+            }
+        }
+
+        private void message_function(ref List<CLIENT> chat_list, ref Socket client, string[] info)
+        {
+            try
+            {
+                add_message("Dang o thread message");
+                string sender = info[1];
+                string receiver = info[2];
+                string text = info[3];
+                bool check = false;
+                foreach (CLIENT item in chat_list)
+                {
+                    if (item.client_name == receiver && item.receive_name == sender)
+                    {
+                        check = true;
+                        add_message("chuan bi gui message");
+                        item.client.Send(serialize("message|" + sender + "|" + receiver + "|" + text));
+                        add_message("da gui message");
+                        break;
+                    }
+                }
+                if (check == false)
+                {
+                    add_message("chuan bi gui rec off");
+                    client.Send(serialize("receiver_off"));
+                    add_message("da gui receiver_off");
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+
         private void receive()
         {
             while (true)
@@ -345,6 +426,24 @@ namespace server_cs
                                   chat_thread.IsBackground = true;
                                   chat_thread.Start();
                               }
+                              else if (info[0] == "on_chatbox" || info[0] == "off_chatbox")
+                              {
+                                  Thread chatbox_thread = new Thread(() =>
+                                    {
+                                        chatbox_function(ref chat_list, ref client, info);
+                                    });
+                                  chatbox_thread.IsBackground = true;
+                                  chatbox_thread.Start();
+                              }
+                              else if (info[0] == "message")
+                              {
+                                  Thread message_thread = new Thread(() =>
+                                    {
+                                        message_function(ref chat_list, ref client, info);
+                                    });
+                                  message_thread.IsBackground = true;
+                                  message_thread.Start();
+                              }
                           }
                       }
                       catch
@@ -359,7 +458,7 @@ namespace server_cs
 
         private void add_message(string s)
         {
-            chat_box.Items.Add(new ListViewItem() { Text = "Server: " + s });
+            chat_box.Items.Add(new ListViewItem() { Text = s });
         }
 
         //=================================nhan
@@ -566,11 +665,6 @@ namespace server_cs
             {
                 client.Close();
             }
-        }
-
-        private void chat_box_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

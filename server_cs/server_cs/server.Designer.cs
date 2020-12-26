@@ -35,12 +35,11 @@ namespace server_cs
             // chat_box
             // 
             this.chat_box.Alignment = System.Windows.Forms.ListViewAlignment.Left;
-            this.chat_box.HideSelection = false;
-            this.chat_box.LabelWrap = false;
-            this.chat_box.Location = new System.Drawing.Point(16, 15);
-            this.chat_box.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chat_box.AllowColumnReorder = true;
+            this.chat_box.AllowDrop = true;
+            this.chat_box.Location = new System.Drawing.Point(12, 12);
             this.chat_box.Name = "chat_box";
-            this.chat_box.Size = new System.Drawing.Size(516, 310);
+            this.chat_box.Size = new System.Drawing.Size(388, 253);
             this.chat_box.TabIndex = 0;
             this.chat_box.TileSize = new System.Drawing.Size(300, 15);
             this.chat_box.UseCompatibleStateImageBehavior = false;
@@ -49,11 +48,10 @@ namespace server_cs
             // 
             // server
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(549, 341);
+            this.ClientSize = new System.Drawing.Size(412, 277);
             this.Controls.Add(this.chat_box);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "server";
             this.Text = "Server";
             this.ResumeLayout(false);

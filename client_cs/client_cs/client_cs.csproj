@@ -100,6 +100,9 @@
     <EmbeddedResource Include="ChangePass.resx">
       <DependentUpon>ChangePass.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Client.resx">
+      <DependentUpon>Client.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FileHandler.resx">
       <DependentUpon>FileHandler.cs</DependentUpon>
     </EmbeddedResource>

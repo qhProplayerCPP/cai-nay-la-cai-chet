@@ -14,16 +14,22 @@ namespace client_cs
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
-            connect();
         }
 
         private void login_button_Click(object sender, EventArgs e)
         {
             if (username_textBox.Text != string.Empty && password_textBox.Text != string.Empty)
             {
-                IPAddress[] iptemp = Dns.GetHostAddresses(Dns.GetHostName());
-                object message = "login" + "|" + username_textBox.Text + "|" + password_textBox.Text + "|" + iptemp[1].ToString();
-                client_socket.Send(serialize(message));
+                int check = connect(ip_box.Text);
+                if (check == 1)
+                {
+                    object message = "login" + "|" + username_textBox.Text + "|" + password_textBox.Text;
+                    client_socket.Send(serialize(message));
+                }
+                else
+                {
+                    MessageBox.Show("Server IP invalid");
+                }
             }
             else
             {
@@ -34,9 +40,9 @@ namespace client_cs
         private IPEndPoint ip;
         private Socket client_socket;
 
-        private void connect()
+        private int connect(string ip_box)
         {
-            ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 2503);
+            ip = new IPEndPoint(IPAddress.Parse(ip_box), 2503);
             client_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
@@ -45,11 +51,12 @@ namespace client_cs
             catch
             {
                 MessageBox.Show("Cant connect to server!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return -1;
             }
             Thread listen = new Thread(receive);
             listen.IsBackground = true;
             listen.Start();
+            return 1;
         }
 
         private void receive()
