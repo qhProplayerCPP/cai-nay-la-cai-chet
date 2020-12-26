@@ -25,3 +25,19 @@ C:\Users\User\source\repos\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\cli
 C:\Users\User\source\repos\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.FileHandler.resources
 C:\Users\User\source\repos\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.newfilename.resources
 C:\Users\User\source\repos\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.SaveFile.resources
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\bin\Debug\client_cs.exe.config
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\bin\Debug\client_cs.exe
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\bin\Debug\client_cs.pdb
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.csprojAssemblyReference.cache
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.ChangePass.resources
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.FileHandler.resources
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.Login.resources
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.Login_success.resources
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.newfilename.resources
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.Properties.Resources.resources
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.Register.resources
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.SaveFile.resources
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.csproj.GenerateResource.cache
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.csproj.CoreCompileInputs.cache
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.exe
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.pdb

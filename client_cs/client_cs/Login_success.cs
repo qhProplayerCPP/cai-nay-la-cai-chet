@@ -133,9 +133,13 @@ namespace client_cs
             return formatter.Deserialize(stream);
         }
 
+        //============================== Hien
         private void changepass_button_Click(object sender, EventArgs e)
         {
+            ChangePass form = new ChangePass();
+            form.ShowDialog();
         }
+        //==================================
 
         private void setup_button_Click(object sender, EventArgs e)
         {

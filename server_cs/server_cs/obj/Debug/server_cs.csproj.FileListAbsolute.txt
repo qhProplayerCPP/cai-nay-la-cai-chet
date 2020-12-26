@@ -18,3 +18,13 @@ C:\Users\User\source\repos\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\ser
 C:\Users\User\source\repos\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.csproj.CoreCompileInputs.cache
 C:\Users\User\source\repos\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.exe
 C:\Users\User\source\repos\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.pdb
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\server_cs\server_cs\bin\Debug\server_cs.exe.config
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\server_cs\server_cs\bin\Debug\server_cs.exe
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\server_cs\server_cs\bin\Debug\server_cs.pdb
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.csprojAssemblyReference.cache
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.Properties.Resources.resources
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.server.resources
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.csproj.GenerateResource.cache
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.csproj.CoreCompileInputs.cache
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.exe
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.pdb

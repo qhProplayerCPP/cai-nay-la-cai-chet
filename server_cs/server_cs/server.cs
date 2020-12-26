@@ -75,6 +75,44 @@ namespace server_cs
 
         //=================================hien
 
+        private void change_pass(ref Socket client, string[] info)
+        {
+            try
+            {
+                get_data(ref all_users);
+                add_message("Dang o thread change password");
+                bool check = true;
+                foreach (user_info item in all_users)
+                {
+                    if (item.username == info[1])
+                    {
+                        check = false;
+                        break;
+                    }
+                }
+                if (check == false)
+                {
+                    client.Send(serialize("false"));
+                }
+                else
+                {
+                    client.Send(serialize("true"));
+                    using (StreamWriter sw = new StreamWriter("database.txt", true))
+                    {
+                        sw.WriteLine(info[1]);
+                        sw.WriteLine(info[2]);
+                        sw.WriteLine(info[3]);
+                        sw.WriteLine(info[4]);
+                    }
+                    string login_notice = "User " + info[1] + " connected!";
+                    add_message(login_notice);
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
         //=================================huy
         private void get_data(ref List<user_info> all_users)
         {
@@ -528,6 +566,11 @@ namespace server_cs
             {
                 client.Close();
             }
+        }
+
+        private void chat_box_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
