@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace client_cs
 {
-    public partial class ChangePass : Form
+    public partial class Fullname__setup_ : Form
     {
-        public ChangePass(string socket_name)
+        public Fullname__setup_(string socket_name)
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
@@ -50,7 +50,7 @@ namespace client_cs
                     string message = (string)deserialize(data);
                     if (message == "true")
                     {
-                        MessageBox.Show("Change password successfully!", "Inform", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Updated fullname successfully!", "Inform", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.Close();
                     }
                     else
@@ -65,12 +65,6 @@ namespace client_cs
                 client_socket.Close();
             }
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private byte[] serialize(object obj)
         {
             MemoryStream stream = new MemoryStream();
@@ -85,29 +79,33 @@ namespace client_cs
             BinaryFormatter formatter = new BinaryFormatter();
             return formatter.Deserialize(stream);
         }
-
-        private void ChangePass_Load(object sender, EventArgs e)
+        private void Fullname__setup__Load(object sender, EventArgs e)
         {
 
         }
 
-        private void oldpassword_textBox_TextChanged(object sender, EventArgs e)
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            if (client_name != string.Empty && oldpassword_textBox.Text != string.Empty && newpassword_textBox.Text != string.Empty)
+            if (name_textBox.Text != string.Empty)
             {
                 IPAddress[] iptemp = Dns.GetHostAddresses(Dns.GetHostName());
-                object message = "changepass" + "|" + client_name + "|" + oldpassword_textBox.Text + "|" + newpassword_textBox.Text + "|" + iptemp[1].ToString();
+                object message = "Fullname" + "|" + client_name + "|" + name_textBox.Text + "|" + iptemp[1].ToString();
                 client_socket.Send(serialize(message));
             }
             else
             {
                 MessageBox.Show("Input is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void name_textBox_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

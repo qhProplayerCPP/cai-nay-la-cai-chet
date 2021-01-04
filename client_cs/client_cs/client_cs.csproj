@@ -53,17 +53,35 @@
     <Compile Include="ChangePass.Designer.cs">
       <DependentUpon>ChangePass.cs</DependentUpon>
     </Compile>
+    <Compile Include="CheckUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CheckUser.Designer.cs">
+      <DependentUpon>CheckUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Client.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Client.Designer.cs">
       <DependentUpon>Client.cs</DependentUpon>
     </Compile>
+    <Compile Include="Date %28setup%29.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Date %28setup%29.Designer.cs">
+      <DependentUpon>Date %28setup%29.cs</DependentUpon>
+    </Compile>
     <Compile Include="FileHandler.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FileHandler.Designer.cs">
       <DependentUpon>FileHandler.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Fullname %28setup%29.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fullname %28setup%29.Designer.cs">
+      <DependentUpon>Fullname %28setup%29.cs</DependentUpon>
     </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
@@ -97,14 +115,29 @@
     <Compile Include="SaveFile.designer.cs">
       <DependentUpon>SaveFile.cs</DependentUpon>
     </Compile>
+    <Compile Include="Setup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Setup.Designer.cs">
+      <DependentUpon>Setup.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="ChangePass.resx">
       <DependentUpon>ChangePass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CheckUser.resx">
+      <DependentUpon>CheckUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Client.resx">
       <DependentUpon>Client.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Date %28setup%29.resx">
+      <DependentUpon>Date %28setup%29.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FileHandler.resx">
       <DependentUpon>FileHandler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fullname %28setup%29.resx">
+      <DependentUpon>Fullname %28setup%29.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
@@ -129,6 +162,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SaveFile.resx">
       <DependentUpon>SaveFile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Setup.resx">
+      <DependentUpon>Setup.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

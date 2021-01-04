@@ -136,7 +136,7 @@ namespace client_cs
         //============================== Hien
         private void changepass_button_Click(object sender, EventArgs e)
         {
-            ChangePass form = new ChangePass();
+            ChangePass form = new ChangePass(client_name);
             form.ShowDialog();
         }
 
@@ -144,12 +144,25 @@ namespace client_cs
 
         private void setup_button_Click(object sender, EventArgs e)
         {
+            Setup form = new Setup(client_name);
+            form.ShowDialog();
         }
 
         private void buttonFile_Click(object sender, EventArgs e)
         {
             FileHandler filehandle = new FileHandler(client_name);
             filehandle.ShowDialog();
+        }
+
+        private void search_button_Click(object sender, EventArgs e)
+        {
+            CheckUser form = new CheckUser();
+            form.ShowDialog();
+        }
+
+        private void userchat_textBox_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

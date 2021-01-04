@@ -42,7 +42,7 @@ namespace client_cs
             // login_button
             // 
             this.login_button.Location = new System.Drawing.Point(89, 198);
-            this.login_button.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.login_button.Margin = new System.Windows.Forms.Padding(4);
             this.login_button.Name = "login_button";
             this.login_button.Size = new System.Drawing.Size(100, 28);
             this.login_button.TabIndex = 3;
@@ -53,7 +53,7 @@ namespace client_cs
             // reg_button
             // 
             this.reg_button.Location = new System.Drawing.Point(213, 198);
-            this.reg_button.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.reg_button.Margin = new System.Windows.Forms.Padding(4);
             this.reg_button.Name = "reg_button";
             this.reg_button.Size = new System.Drawing.Size(100, 28);
             this.reg_button.TabIndex = 4;
@@ -85,7 +85,7 @@ namespace client_cs
             // 
             this.username_textBox.AcceptsTab = true;
             this.username_textBox.Location = new System.Drawing.Point(135, 110);
-            this.username_textBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.username_textBox.Margin = new System.Windows.Forms.Padding(4);
             this.username_textBox.Name = "username_textBox";
             this.username_textBox.Size = new System.Drawing.Size(207, 22);
             this.username_textBox.TabIndex = 1;
@@ -94,17 +94,18 @@ namespace client_cs
             // 
             this.password_textBox.AcceptsTab = true;
             this.password_textBox.Location = new System.Drawing.Point(135, 151);
-            this.password_textBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.password_textBox.Margin = new System.Windows.Forms.Padding(4);
             this.password_textBox.Name = "password_textBox";
             this.password_textBox.PasswordChar = '*';
             this.password_textBox.Size = new System.Drawing.Size(207, 22);
             this.password_textBox.TabIndex = 2;
+            this.password_textBox.TextChanged += new System.EventHandler(this.password_textBox_TextChanged);
             // 
             // ip_box
             // 
             this.ip_box.AcceptsTab = true;
             this.ip_box.Location = new System.Drawing.Point(135, 28);
-            this.ip_box.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ip_box.Margin = new System.Windows.Forms.Padding(4);
             this.ip_box.Name = "ip_box";
             this.ip_box.Size = new System.Drawing.Size(207, 22);
             this.ip_box.TabIndex = 0;
@@ -134,7 +135,7 @@ namespace client_cs
             this.Controls.Add(this.label1);
             this.Controls.Add(this.reg_button);
             this.Controls.Add(this.login_button);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Login";
             this.Text = "Login";
             this.Load += new System.EventHandler(this.Login_Load);

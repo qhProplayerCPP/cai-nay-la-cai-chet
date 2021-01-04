@@ -110,5 +110,10 @@ namespace client_cs
         {
 
         }
+
+        private void password_textBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
