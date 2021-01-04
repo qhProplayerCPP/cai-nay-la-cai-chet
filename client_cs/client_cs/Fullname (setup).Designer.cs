@@ -85,7 +85,7 @@ namespace client_cs
             this.Controls.Add(this.button1);
             this.Controls.Add(this.name_textBox);
             this.Name = "Fullname__setup_";
-            this.Text = "Fullname__setup_";
+            this.Text = "Fullname setup";
             this.Load += new System.EventHandler(this.Fullname__setup__Load);
             this.ResumeLayout(false);
             this.PerformLayout();

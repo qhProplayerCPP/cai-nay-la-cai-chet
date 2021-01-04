@@ -124,6 +124,44 @@ namespace server_cs
             }
         }
 
+        private void setup_date(ref Socket client, string[] info)
+        {
+            try
+            {
+                get_data(ref all_users);
+                add_message("Dang o thread setup_date");
+                var index = all_users.FindIndex(c => c.username == info[1]);
+                if (index == -1)
+                {
+                    client.Send(serialize("false"));
+                }
+                else
+                {
+                    user_info temp = all_users[index];
+                    temp.dob = info[2];
+                    all_users[index] = new user_info();
+                    all_users[index] = temp;
+                    client.Send(serialize("true"));
+                    using (TextWriter tw = new StreamWriter("database.txt", false))
+                    {
+                        foreach (user_info s in all_users)
+                        {
+                            tw.WriteLine(s.username);
+                            tw.WriteLine(s.password);
+                            tw.WriteLine(s.fullname);
+                            tw.WriteLine(s.dob);
+                        }
+                    }
+                    string notice = "User " + info[1] + " updated day of birth successfully!";
+                    add_message(notice);
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+
         //=================================huy
 
         private void connect()
@@ -498,6 +536,15 @@ namespace server_cs
                                   });
                                   fullnameSet_thread.IsBackground = true;
                                   fullnameSet_thread.Start();
+                              }
+                              else if (info[0] == "DOB")
+                              {
+                                  Thread DOB_thread = new Thread(() =>
+                                  {
+                                      setup_date(ref client, info);
+                                  });
+                                  DOB_thread.IsBackground = true;
+                                  DOB_thread.Start();
                               }
                           }
                       }
