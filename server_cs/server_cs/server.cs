@@ -54,32 +54,24 @@ namespace server_cs
             {
                 get_data(ref all_users);
                 add_message("Dang o thread change password");
-                bool check = true;
-                foreach (user_info item in all_users)
+                var index = all_users.FindIndex(c => c.username == info[1]);
+                user_info temp = all_users[index];
+                temp.password = info[3];
+                all_users[index] = new user_info();
+                all_users[index] = temp;
+                client.Send(serialize("true"));
+                using (TextWriter tw = new StreamWriter("database.txt", false))
                 {
-                    if (item.username == info[1])
+                    foreach (user_info s in all_users)
                     {
-                        check = false;
-                        break;
+                        tw.WriteLine(s.username);
+                        tw.WriteLine(s.password);
+                        tw.WriteLine(s.fullname);
+                        tw.WriteLine(s.dob);
                     }
                 }
-                if (check == false)
-                {
-                    client.Send(serialize("false"));
-                }
-                else
-                {
-                    client.Send(serialize("true"));
-                    using (StreamWriter sw = new StreamWriter("database.txt", true))
-                    {
-                        sw.WriteLine(info[1]);
-                        sw.WriteLine(info[2]);
-                        sw.WriteLine(info[3]);
-                        sw.WriteLine(info[4]);
-                    }
-                    string login_notice = "User " + info[1] + " connected!";
-                    add_message(login_notice);
-                }
+                string notice = "User " + info[1] + " changed password successfully!";
+                add_message(notice);
             }
             catch
             {
@@ -443,6 +435,15 @@ namespace server_cs
                                     });
                                   message_thread.IsBackground = true;
                                   message_thread.Start();
+                              }
+                              else if (info[0] == "changepass")
+                              {
+                                  Thread changepass_thread = new Thread(() =>
+                                  {
+                                      change_pass(ref client, info);
+                                  });
+                                  changepass_thread.IsBackground = true;
+                                  changepass_thread.Start();
                               }
                           }
                       }

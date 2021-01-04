@@ -41,9 +41,10 @@ namespace client_cs
             // 
             // login_button
             // 
-            this.login_button.Location = new System.Drawing.Point(67, 161);
+            this.login_button.Location = new System.Drawing.Point(89, 198);
+            this.login_button.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.login_button.Name = "login_button";
-            this.login_button.Size = new System.Drawing.Size(75, 23);
+            this.login_button.Size = new System.Drawing.Size(100, 28);
             this.login_button.TabIndex = 3;
             this.login_button.Text = "Login";
             this.login_button.UseVisualStyleBackColor = true;
@@ -51,9 +52,10 @@ namespace client_cs
             // 
             // reg_button
             // 
-            this.reg_button.Location = new System.Drawing.Point(160, 161);
+            this.reg_button.Location = new System.Drawing.Point(213, 198);
+            this.reg_button.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.reg_button.Name = "reg_button";
-            this.reg_button.Size = new System.Drawing.Size(75, 23);
+            this.reg_button.Size = new System.Drawing.Size(100, 28);
             this.reg_button.TabIndex = 4;
             this.reg_button.Text = "Register";
             this.reg_button.UseVisualStyleBackColor = true;
@@ -62,62 +64,68 @@ namespace client_cs
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(19, 92);
+            this.label1.Location = new System.Drawing.Point(25, 113);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(55, 13);
+            this.label1.Size = new System.Drawing.Size(73, 17);
             this.label1.TabIndex = 1;
             this.label1.Text = "Username";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(19, 126);
+            this.label2.Location = new System.Drawing.Point(25, 155);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(53, 13);
+            this.label2.Size = new System.Drawing.Size(69, 17);
             this.label2.TabIndex = 1;
             this.label2.Text = "Password";
             // 
             // username_textBox
             // 
             this.username_textBox.AcceptsTab = true;
-            this.username_textBox.Location = new System.Drawing.Point(101, 89);
+            this.username_textBox.Location = new System.Drawing.Point(135, 110);
+            this.username_textBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.username_textBox.Name = "username_textBox";
-            this.username_textBox.Size = new System.Drawing.Size(156, 20);
+            this.username_textBox.Size = new System.Drawing.Size(207, 22);
             this.username_textBox.TabIndex = 1;
             // 
             // password_textBox
             // 
             this.password_textBox.AcceptsTab = true;
-            this.password_textBox.Location = new System.Drawing.Point(101, 123);
+            this.password_textBox.Location = new System.Drawing.Point(135, 151);
+            this.password_textBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.password_textBox.Name = "password_textBox";
             this.password_textBox.PasswordChar = '*';
-            this.password_textBox.Size = new System.Drawing.Size(156, 20);
+            this.password_textBox.Size = new System.Drawing.Size(207, 22);
             this.password_textBox.TabIndex = 2;
             // 
             // ip_box
             // 
             this.ip_box.AcceptsTab = true;
-            this.ip_box.Location = new System.Drawing.Point(101, 23);
+            this.ip_box.Location = new System.Drawing.Point(135, 28);
+            this.ip_box.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ip_box.Name = "ip_box";
-            this.ip_box.Size = new System.Drawing.Size(156, 20);
+            this.ip_box.Size = new System.Drawing.Size(207, 22);
             this.ip_box.TabIndex = 0;
             this.ip_box.Text = "127.0.0.1";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(19, 26);
+            this.label3.Location = new System.Drawing.Point(25, 32);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(51, 13);
+            this.label3.Size = new System.Drawing.Size(66, 17);
             this.label3.TabIndex = 1;
             this.label3.Text = "Server IP";
             // 
             // Login
             // 
             this.AcceptButton = this.login_button;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(300, 215);
+            this.ClientSize = new System.Drawing.Size(400, 265);
             this.Controls.Add(this.ip_box);
             this.Controls.Add(this.password_textBox);
             this.Controls.Add(this.username_textBox);
@@ -126,8 +134,10 @@ namespace client_cs
             this.Controls.Add(this.label1);
             this.Controls.Add(this.reg_button);
             this.Controls.Add(this.login_button);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Login";
             this.Text = "Login";
+            this.Load += new System.EventHandler(this.Login_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -43,3 +43,4 @@ D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\cl
 D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.pdb
 C:\Users\User\source\repos\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.ChangePass.resources
 C:\Users\User\source\repos\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.Client.resources
+D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.Client.resources

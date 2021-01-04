@@ -84,6 +84,7 @@ namespace client_cs
             this.Controls.Add(this.buttonapply);
             this.Name = "newfilename";
             this.Text = "newfilename";
+            this.Load += new System.EventHandler(this.newfilename_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

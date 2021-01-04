@@ -105,5 +105,10 @@ namespace client_cs
             Register form = new Register();
             form.ShowDialog();
         }
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

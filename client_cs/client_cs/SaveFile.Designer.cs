@@ -71,6 +71,7 @@ namespace client_cs
             this.Controls.Add(this.savefilelb);
             this.Name = "SaveFile";
             this.Text = "SaveFile";
+            this.Load += new System.EventHandler(this.SaveFile_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

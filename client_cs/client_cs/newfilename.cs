@@ -26,5 +26,10 @@ namespace client_cs
         {
 
         }
+
+        private void newfilename_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

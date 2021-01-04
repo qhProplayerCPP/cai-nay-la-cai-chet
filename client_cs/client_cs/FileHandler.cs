@@ -288,6 +288,11 @@ namespace client_cs
                 }
             }
         }
+
+        private void FileHandler_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

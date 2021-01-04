@@ -130,6 +130,11 @@ namespace client_cs
             chatbox.Items.Add(new ListViewItem() { Text = s });
         }
 
+        private void chatbox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void add_message_from_sv(string s)
         {
             chatbox.Items.Add(new ListViewItem() { Text = receiver + ": " + s });

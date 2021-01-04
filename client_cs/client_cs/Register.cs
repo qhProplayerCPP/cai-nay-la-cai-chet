@@ -92,5 +92,10 @@ namespace client_cs
                 MessageBox.Show("Input is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void Register_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

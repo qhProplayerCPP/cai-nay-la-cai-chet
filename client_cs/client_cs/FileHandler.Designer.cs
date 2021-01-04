@@ -62,6 +62,7 @@ namespace client_cs
             this.Controls.Add(this.uploadbutton);
             this.Name = "FileHandler";
             this.Text = "FileHandler";
+            this.Load += new System.EventHandler(this.FileHandler_Load);
             this.ResumeLayout(false);
 
         }
