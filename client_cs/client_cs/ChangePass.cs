@@ -49,7 +49,8 @@ namespace client_cs
                     string message = (string)deserialize(data);
                     if (message == "true")
                     {
-                        Application.Run(new Login_success(username_textBox.Text));
+                        MessageBox.Show("Change password successfully!", "Inform", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        System.Windows.Forms.Application.ExitThread();
                     }
                     else
                     {
@@ -66,16 +67,16 @@ namespace client_cs
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (username_textBox.Text != string.Empty && oldpassword_textBox.Text != string.Empty && newpassword_textBox.Text != string.Empty)
-            {
-                IPAddress[] iptemp = Dns.GetHostAddresses(Dns.GetHostName());
-                object message = "changepass" + "|" + username_textBox.Text + "|" + oldpassword_textBox.Text + "|" + newpassword_textBox.Text + "|" + iptemp[1].ToString();
-                client_socket.Send(serialize(message));
-            }
-            else
-            {
-                MessageBox.Show("Input is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //if (username_textBox.Text != string.Empty && oldpassword_textBox.Text != string.Empty && newpassword_textBox.Text != string.Empty)
+            //{
+            //    IPAddress[] iptemp = Dns.GetHostAddresses(Dns.GetHostName());
+            //    object message = "changepass" + "|" + username_textBox.Text + "|" + oldpassword_textBox.Text + "|" + newpassword_textBox.Text + "|" + iptemp[1].ToString();
+            //    client_socket.Send(serialize(message));
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Input is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
 
         private byte[] serialize(object obj)

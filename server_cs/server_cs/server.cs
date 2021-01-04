@@ -54,24 +54,31 @@ namespace server_cs
             {
                 get_data(ref all_users);
                 add_message("Dang o thread change password");
-                var index = all_users.FindIndex(c => c.username == info[1]);
-                user_info temp = all_users[index];
-                temp.password = info[3];
-                all_users[index] = new user_info();
-                all_users[index] = temp;
-                client.Send(serialize("true"));
-                using (TextWriter tw = new StreamWriter("database.txt", false))
+                var index = all_users.FindIndex(c => c.username == info[1] && c.password == info[2]);
+                if (index == -1)
                 {
-                    foreach (user_info s in all_users)
-                    {
-                        tw.WriteLine(s.username);
-                        tw.WriteLine(s.password);
-                        tw.WriteLine(s.fullname);
-                        tw.WriteLine(s.dob);
-                    }
+                    client.Send(serialize("false"));
                 }
-                string notice = "User " + info[1] + " changed password successfully!";
-                add_message(notice);
+                else
+                {
+                    user_info temp = all_users[index];
+                    temp.password = info[3];
+                    all_users[index] = new user_info();
+                    all_users[index] = temp;
+                    client.Send(serialize("true"));
+                    using (TextWriter tw = new StreamWriter("database.txt", false))
+                    {
+                        foreach (user_info s in all_users)
+                        {
+                            tw.WriteLine(s.username);
+                            tw.WriteLine(s.password);
+                            tw.WriteLine(s.fullname);
+                            tw.WriteLine(s.dob);
+                        }
+                    }
+                    string notice = "User " + info[1] + " changed password successfully!";
+                    add_message(notice);
+                }
             }
             catch
             {
