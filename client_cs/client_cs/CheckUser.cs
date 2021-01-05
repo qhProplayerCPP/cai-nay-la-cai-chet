@@ -107,6 +107,14 @@ namespace client_cs
                         {
                             MessageBox.Show("Username: " + info[1] + Environment.NewLine + "Fullname: " + info[2] + Environment.NewLine + "D.O.B: " + info[3], "Inform", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
+                        else if (info[0] == "false online")
+                        {
+                            MessageBox.Show("This user is not online/exist!", "Inform", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else if (info[0] == "true online")
+                        {
+                            MessageBox.Show("This user is online now!", "Inform", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
                 }
                 catch
@@ -148,7 +156,16 @@ namespace client_cs
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            if (username_textBox.Text != string.Empty)
+            {
+                IPAddress[] iptemp = Dns.GetHostAddresses(Dns.GetHostName());
+                object message = "CheckOnline" + "|" + username_textBox.Text + "|" + iptemp[1].ToString();
+                client_socket.Send(serialize(message));
+            }
+            else
+            {
+                MessageBox.Show("Input is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)

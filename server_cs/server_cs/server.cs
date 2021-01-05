@@ -264,6 +264,32 @@ namespace server_cs
             }
         }
 
+        private void check_online(ref List<CLIENT> client_list, ref Socket client, string[] info)
+        {
+            try
+            {
+                add_message("Dang o thread check online");
+                bool check = false;
+                foreach (CLIENT item in client_list)
+                {
+                    if (item.client_name == info[1])
+                    {
+                        client.Send(serialize("true online"));
+                        check = true;
+                        break;
+                    }
+                }
+                if (check==false)
+                {
+                    client.Send(serialize("false online"));
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+
         //=================================huy
 
         private void connect()
@@ -656,6 +682,15 @@ namespace server_cs
                                   });
                                   FindUser_thread.IsBackground = true;
                                   FindUser_thread.Start();
+                              }
+                              else if (info[0] == "CheckOnline")
+                              {
+                                  Thread Check_thread = new Thread(() =>
+                                  {
+                                      check_online(ref client_list, ref client, info);
+                                  });
+                                  Check_thread.IsBackground = true;
+                                  Check_thread.Start();
                               }
                               else if (info[0] == "ShowDate")
                               {
