@@ -162,6 +162,30 @@ namespace server_cs
             }
         }
 
+        private void find_user(ref Socket client, string[] info)
+        {
+            try
+            {
+                get_data(ref all_users);
+                add_message("Dang o thread find user");
+                var index = all_users.FindIndex(c => c.username == info[1]);
+                if (index == -1)
+                {
+                    client.Send(serialize("false"));
+                }
+                else
+                {
+                    client.Send(serialize("true"));
+                    string notice = "Find information of " + info[1];
+                    add_message(notice);
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+
         //=================================huy
 
         private void connect()
@@ -545,6 +569,15 @@ namespace server_cs
                                   });
                                   DOB_thread.IsBackground = true;
                                   DOB_thread.Start();
+                              }
+                              else if (info[0] == "FindUser")
+                              {
+                                  Thread FindUser_thread = new Thread(() =>
+                                  {
+                                      find_user(ref client, info);
+                                  });
+                                  FindUser_thread.IsBackground = true;
+                                  FindUser_thread.Start();
                               }
                           }
                       }
