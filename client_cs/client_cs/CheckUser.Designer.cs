@@ -35,6 +35,7 @@ namespace client_cs
             this.button4 = new System.Windows.Forms.Button();
             this.username_textBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.button5 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -73,7 +74,7 @@ namespace client_cs
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(185, 39);
             this.button4.TabIndex = 3;
-            this.button4.Text = "Show All";
+            this.button4.Text = "Show Fullname";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
@@ -96,11 +97,22 @@ namespace client_cs
             this.label1.TabIndex = 5;
             this.label1.Text = "Username";
             // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(78, 337);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(185, 39);
+            this.button5.TabIndex = 6;
+            this.button5.Text = "Show All";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // CheckUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(343, 340);
+            this.ClientSize = new System.Drawing.Size(343, 407);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.username_textBox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button4);
@@ -123,5 +135,6 @@ namespace client_cs
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.TextBox username_textBox;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button5;
     }
 }

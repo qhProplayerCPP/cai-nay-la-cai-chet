@@ -171,12 +171,90 @@ namespace server_cs
                 var index = all_users.FindIndex(c => c.username == info[1]);
                 if (index == -1)
                 {
-                    client.Send(serialize("false"));
+                    client.Send(serialize("false find"));
                 }
                 else
                 {
-                    client.Send(serialize("true"));
+                    client.Send(serialize("true find"));
                     string notice = "Find information of " + info[1];
+                    add_message(notice);
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+
+        private void show_date(ref Socket client, string[] info)
+        {
+            try
+            {
+                get_data(ref all_users);
+                add_message("Dang o thread show date");
+                var index = all_users.FindIndex(c => c.username == info[1]);
+                if (index == -1)
+                {
+                    client.Send(serialize("false showdate"));
+                }
+                else
+                {
+                    IPAddress[] iptemp = Dns.GetHostAddresses(Dns.GetHostName());
+                    object message = "true showdate" + "|" + all_users[index].dob + "|" + iptemp[1].ToString();
+                    client.Send(serialize(message));
+                    string notice = "Show date of birth of " + info[1];
+                    add_message(notice);
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+
+        private void show_name(ref Socket client, string[] info)
+        {
+            try
+            {
+                get_data(ref all_users);
+                add_message("Dang o thread show name");
+                var index = all_users.FindIndex(c => c.username == info[1]);
+                if (index == -1)
+                {
+                    client.Send(serialize("false showname"));
+                }
+                else
+                {
+                    IPAddress[] iptemp = Dns.GetHostAddresses(Dns.GetHostName());
+                    object message = "true showname" + "|" + all_users[index].fullname + "|" + iptemp[1].ToString();
+                    client.Send(serialize(message));
+                    string notice = "Show full name of " + info[1];
+                    add_message(notice);
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+
+        private void show_all(ref Socket client, string[] info)
+        {
+            try
+            {
+                get_data(ref all_users);
+                add_message("Dang o thread show all");
+                var index = all_users.FindIndex(c => c.username == info[1]);
+                if (index == -1)
+                {
+                    client.Send(serialize("false showall"));
+                }
+                else
+                {
+                    IPAddress[] iptemp = Dns.GetHostAddresses(Dns.GetHostName());
+                    object message = "true showall" + "|" + all_users[index].username + "|" + all_users[index].fullname + "|" + all_users[index].dob + "|" + iptemp[1].ToString();
+                    client.Send(serialize(message));
+                    string notice = "Show all of " + info[1];
                     add_message(notice);
                 }
             }
@@ -578,6 +656,33 @@ namespace server_cs
                                   });
                                   FindUser_thread.IsBackground = true;
                                   FindUser_thread.Start();
+                              }
+                              else if (info[0] == "ShowDate")
+                              {
+                                  Thread Show_thread = new Thread(() =>
+                                  {
+                                      show_date(ref client, info);
+                                  });
+                                  Show_thread.IsBackground = true;
+                                  Show_thread.Start();
+                              }
+                              else if (info[0] == "ShowFullname")
+                              {
+                                  Thread Show_thread = new Thread(() =>
+                                  {
+                                      show_name(ref client, info);
+                                  });
+                                  Show_thread.IsBackground = true;
+                                  Show_thread.Start();
+                              }
+                              else if (info[0] == "ShowAll")
+                              {
+                                  Thread Show_thread = new Thread(() =>
+                                  {
+                                      show_all(ref client, info);
+                                  });
+                                  Show_thread.IsBackground = true;
+                                  Show_thread.Start();
                               }
                           }
                       }
