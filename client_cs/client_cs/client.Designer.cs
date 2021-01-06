@@ -36,10 +36,9 @@ namespace client_cs
             // 
             // send_button
             // 
-            this.send_button.Location = new System.Drawing.Point(500, 338);
-            this.send_button.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.send_button.Location = new System.Drawing.Point(375, 275);
             this.send_button.Name = "send_button";
-            this.send_button.Size = new System.Drawing.Size(95, 58);
+            this.send_button.Size = new System.Drawing.Size(71, 47);
             this.send_button.TabIndex = 1;
             this.send_button.Text = "Send";
             this.send_button.UseVisualStyleBackColor = true;
@@ -49,35 +48,31 @@ namespace client_cs
             // 
             this.chatbox.Alignment = System.Windows.Forms.ListViewAlignment.Left;
             this.chatbox.HideSelection = false;
-            this.chatbox.Location = new System.Drawing.Point(16, 15);
-            this.chatbox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chatbox.Location = new System.Drawing.Point(12, 12);
             this.chatbox.Name = "chatbox";
-            this.chatbox.Size = new System.Drawing.Size(577, 315);
+            this.chatbox.Size = new System.Drawing.Size(434, 257);
             this.chatbox.TabIndex = 2;
             this.chatbox.UseCompatibleStateImageBehavior = false;
             this.chatbox.View = System.Windows.Forms.View.SmallIcon;
-            this.chatbox.SelectedIndexChanged += new System.EventHandler(this.chatbox_SelectedIndexChanged);
             // 
             // typebox
             // 
             this.typebox.AcceptsTab = true;
-            this.typebox.Location = new System.Drawing.Point(16, 338);
-            this.typebox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.typebox.Location = new System.Drawing.Point(12, 275);
             this.typebox.Multiline = true;
             this.typebox.Name = "typebox";
-            this.typebox.Size = new System.Drawing.Size(475, 57);
+            this.typebox.Size = new System.Drawing.Size(357, 47);
             this.typebox.TabIndex = 0;
             // 
             // Client
             // 
             this.AcceptButton = this.send_button;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(611, 411);
+            this.ClientSize = new System.Drawing.Size(458, 334);
             this.Controls.Add(this.typebox);
             this.Controls.Add(this.chatbox);
             this.Controls.Add(this.send_button);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Client";
             this.Text = "Client";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Client_FormClosed);

@@ -10,7 +10,11 @@ namespace client_cs
 {
     public partial class Client : Form
     {
-        public Client(string s, string r,string ip_addr)
+        private IPEndPoint ip;
+        private Socket client_socket;
+        private string sender, receiver, ip_address;
+
+        public Client(string s, string r, string ip_addr)
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
@@ -19,10 +23,6 @@ namespace client_cs
             ip_address = ip_addr;
             connect();
         }
-
-        private IPEndPoint ip;
-        private Socket client_socket;
-        private string sender, receiver,ip_address;
 
         private void connect()
         {
@@ -40,6 +40,63 @@ namespace client_cs
             Thread receive_from_sv = new Thread(receive);
             receive_from_sv.IsBackground = true;
             receive_from_sv.Start();
+        }
+
+        private void receive()
+        {
+            Thread receive = new Thread(() =>
+            {
+                try
+                {
+                    while (true)
+                    {
+                        byte[] data = new byte[1024 * 5000];
+                        client_socket.Receive(data);
+                        string message = (string)deserialize(data);
+                        string[] info = message.Split('|');
+                        if (info[0] == "receiver_off")
+                        {
+                            MessageBox.Show(receiver + " has disconnected from the chat");
+                            this.Close();
+                        }
+                        else if (info[0] == "message")
+                        {
+                            add_message_from_sv(info[3]);
+                        }
+                    }
+                }
+                catch
+                {
+                    client_socket.Close();
+                }
+            });
+            receive.IsBackground = true;
+            receive.Start();
+        }
+
+        private void add_message(string s)
+        {
+            chatbox.Items.Add(new ListViewItem() { Text = s });
+        }
+
+        private void add_message_from_sv(string s)
+        {
+            chatbox.Items.Add(new ListViewItem() { Text = receiver + ": " + s });
+        }
+
+        private byte[] serialize(object obj)
+        {
+            MemoryStream stream = new MemoryStream();
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(stream, obj);
+            return stream.ToArray();
+        }
+
+        private object deserialize(byte[] data)
+        {
+            MemoryStream stream = new MemoryStream(data);
+            BinaryFormatter formatter = new BinaryFormatter();
+            return formatter.Deserialize(stream);
         }
 
         private void Client_Load(object send, EventArgs e)
@@ -77,68 +134,6 @@ namespace client_cs
                 add_message(typebox.Text);
                 typebox.Clear();
             }
-        }
-
-        private void receive()
-        {
-            Thread receive = new Thread(() =>
-            {
-                try
-                {
-                    while (true)
-                    {
-                        byte[] data = new byte[1024 * 5000];
-                        client_socket.Receive(data);
-                        string message = (string)deserialize(data);
-                        string[] info = message.Split('|');
-                        if (info[0] == "receiver_off")
-                        {
-                            MessageBox.Show(receiver + " has disconnected from the chat");
-                            this.Close();
-                        }
-                        else if (info[0] == "message")
-                        {
-                            add_message_from_sv(info[3]);
-                        }
-                    }
-                }
-                catch
-                {
-                    client_socket.Close();
-                }
-            });
-            receive.IsBackground = true;
-            receive.Start();
-        }
-
-        private byte[] serialize(object obj)
-        {
-            MemoryStream stream = new MemoryStream();
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, obj);
-            return stream.ToArray();
-        }
-
-        private object deserialize(byte[] data)
-        {
-            MemoryStream stream = new MemoryStream(data);
-            BinaryFormatter formatter = new BinaryFormatter();
-            return formatter.Deserialize(stream);
-        }
-
-        private void add_message(string s)
-        {
-            chatbox.Items.Add(new ListViewItem() { Text = s });
-        }
-
-        private void chatbox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void add_message_from_sv(string s)
-        {
-            chatbox.Items.Add(new ListViewItem() { Text = receiver + ": " + s });
         }
     }
 }

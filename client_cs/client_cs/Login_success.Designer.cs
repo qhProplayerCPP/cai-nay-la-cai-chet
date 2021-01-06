@@ -40,10 +40,9 @@ namespace client_cs
             // 
             // changepass_button
             // 
-            this.changepass_button.Location = new System.Drawing.Point(93, 140);
-            this.changepass_button.Margin = new System.Windows.Forms.Padding(4);
+            this.changepass_button.Location = new System.Drawing.Point(70, 114);
             this.changepass_button.Name = "changepass_button";
-            this.changepass_button.Size = new System.Drawing.Size(156, 28);
+            this.changepass_button.Size = new System.Drawing.Size(117, 23);
             this.changepass_button.TabIndex = 2;
             this.changepass_button.Text = "Change password";
             this.changepass_button.UseVisualStyleBackColor = true;
@@ -51,10 +50,9 @@ namespace client_cs
             // 
             // search_button
             // 
-            this.search_button.Location = new System.Drawing.Point(93, 191);
-            this.search_button.Margin = new System.Windows.Forms.Padding(4);
+            this.search_button.Location = new System.Drawing.Point(70, 155);
             this.search_button.Name = "search_button";
-            this.search_button.Size = new System.Drawing.Size(156, 28);
+            this.search_button.Size = new System.Drawing.Size(117, 23);
             this.search_button.TabIndex = 3;
             this.search_button.Text = "Search";
             this.search_button.UseVisualStyleBackColor = true;
@@ -62,10 +60,9 @@ namespace client_cs
             // 
             // setup_button
             // 
-            this.setup_button.Location = new System.Drawing.Point(93, 242);
-            this.setup_button.Margin = new System.Windows.Forms.Padding(4);
+            this.setup_button.Location = new System.Drawing.Point(70, 197);
             this.setup_button.Name = "setup_button";
-            this.setup_button.Size = new System.Drawing.Size(156, 28);
+            this.setup_button.Size = new System.Drawing.Size(117, 23);
             this.setup_button.TabIndex = 4;
             this.setup_button.Text = "Setup";
             this.setup_button.UseVisualStyleBackColor = true;
@@ -74,29 +71,26 @@ namespace client_cs
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(44, 49);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(33, 40);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(73, 17);
+            this.label1.Size = new System.Drawing.Size(55, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "Username";
             // 
             // userchat_textBox
             // 
             this.userchat_textBox.AcceptsTab = true;
-            this.userchat_textBox.Location = new System.Drawing.Point(144, 46);
-            this.userchat_textBox.Margin = new System.Windows.Forms.Padding(4);
+            this.userchat_textBox.Location = new System.Drawing.Point(108, 37);
             this.userchat_textBox.Name = "userchat_textBox";
-            this.userchat_textBox.Size = new System.Drawing.Size(152, 22);
+            this.userchat_textBox.Size = new System.Drawing.Size(115, 20);
             this.userchat_textBox.TabIndex = 0;
-            this.userchat_textBox.TextChanged += new System.EventHandler(this.userchat_textBox_TextChanged);
             // 
             // buttonFile
             // 
-            this.buttonFile.Location = new System.Drawing.Point(93, 289);
-            this.buttonFile.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonFile.Location = new System.Drawing.Point(70, 235);
+            this.buttonFile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonFile.Name = "buttonFile";
-            this.buttonFile.Size = new System.Drawing.Size(156, 32);
+            this.buttonFile.Size = new System.Drawing.Size(117, 26);
             this.buttonFile.TabIndex = 5;
             this.buttonFile.Text = "File";
             this.buttonFile.UseVisualStyleBackColor = true;
@@ -104,10 +98,9 @@ namespace client_cs
             // 
             // chat_button
             // 
-            this.chat_button.Location = new System.Drawing.Point(93, 90);
-            this.chat_button.Margin = new System.Windows.Forms.Padding(4);
+            this.chat_button.Location = new System.Drawing.Point(70, 73);
             this.chat_button.Name = "chat_button";
-            this.chat_button.Size = new System.Drawing.Size(156, 28);
+            this.chat_button.Size = new System.Drawing.Size(117, 23);
             this.chat_button.TabIndex = 1;
             this.chat_button.Text = "Chat";
             this.chat_button.UseVisualStyleBackColor = true;
@@ -116,9 +109,9 @@ namespace client_cs
             // Login_success
             // 
             this.AcceptButton = this.chat_button;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(341, 352);
+            this.ClientSize = new System.Drawing.Size(256, 286);
             this.Controls.Add(this.chat_button);
             this.Controls.Add(this.buttonFile);
             this.Controls.Add(this.userchat_textBox);
@@ -126,7 +119,6 @@ namespace client_cs
             this.Controls.Add(this.setup_button);
             this.Controls.Add(this.search_button);
             this.Controls.Add(this.changepass_button);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Login_success";
             this.Text = "Client";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Login_success_FormClosed);

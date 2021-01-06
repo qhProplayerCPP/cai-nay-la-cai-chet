@@ -10,6 +10,10 @@ namespace client_cs
 {
     public partial class Register : Form
     {
+        private IPEndPoint ip;
+        private Socket client_socket;
+        private string ip_address;
+
         public Register(string ip_addr)
         {
             InitializeComponent();
@@ -17,10 +21,6 @@ namespace client_cs
             ip_address = ip_addr;
             connect();
         }
-
-        private IPEndPoint ip;
-        private Socket client_socket;
-        string ip_address;
 
         private void connect()
         {
@@ -51,7 +51,7 @@ namespace client_cs
                     string message = (string)deserialize(data);
                     if (message == "true")
                     {
-                        Application.Run(new Login_success(textBox1.Text,ip_address));
+                        Application.Run(new Login_success(textBox1.Text, ip_address));
                     }
                     else
                     {
@@ -93,11 +93,6 @@ namespace client_cs
             {
                 MessageBox.Show("Input is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void Register_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

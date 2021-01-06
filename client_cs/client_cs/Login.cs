@@ -10,35 +10,15 @@ namespace client_cs
 {
     public partial class Login : Form
     {
+        private IPEndPoint ip;
+        private Socket client_socket;
+
         public Login()
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
+            connect(ip_box.Text);
         }
-
-        private void login_button_Click(object sender, EventArgs e)
-        {
-            if (username_textBox.Text != string.Empty && password_textBox.Text != string.Empty)
-            {
-                int check = connect(ip_box.Text);
-                if (check == 1)
-                {
-                    object message = "login" + "|" + username_textBox.Text + "|" + password_textBox.Text;
-                    client_socket.Send(serialize(message));
-                }
-                else
-                {
-                    MessageBox.Show("Server IP invalid");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Input is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private IPEndPoint ip;
-        private Socket client_socket;
 
         private int connect(string ip_box)
         {
@@ -70,7 +50,7 @@ namespace client_cs
                     string message = (string)deserialize(data);
                     if (message == "true")
                     {
-                        Application.Run(new Login_success(username_textBox.Text,ip_box.Text));
+                        Application.Run(new Login_success(username_textBox.Text, ip_box.Text));
                     }
                     else
                     {
@@ -102,18 +82,36 @@ namespace client_cs
 
         private void reg_button_Click(object sender, EventArgs e)
         {
-            Register form = new Register(ip_box.Text);
-            form.ShowDialog();
+            if (ip_box.Text != string.Empty)
+            {
+                Register form = new Register(ip_box.Text);
+                form.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Input server IP");
+            }
         }
 
-        private void Login_Load(object sender, EventArgs e)
+        private void login_button_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void password_textBox_TextChanged(object sender, EventArgs e)
-        {
-
+            if (username_textBox.Text != string.Empty && password_textBox.Text != string.Empty)
+            {
+                int check = connect(ip_box.Text);
+                if (check == 1)
+                {
+                    object message = "login" + "|" + username_textBox.Text + "|" + password_textBox.Text;
+                    client_socket.Send(serialize(message));
+                }
+                else
+                {
+                    MessageBox.Show("Server IP invalid");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Input is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
