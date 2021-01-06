@@ -48,3 +48,7 @@ D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\cl
 D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.Setup.resources
 D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.Fullname__setup_.resources
 D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.Date__setup_.resources
+C:\Users\User\source\repos\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.CheckUser.resources
+C:\Users\User\source\repos\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.Date__setup_.resources
+C:\Users\User\source\repos\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.Fullname__setup_.resources
+C:\Users\User\source\repos\cai-nay-la-cai-chet\client_cs\client_cs\obj\Debug\client_cs.Setup.resources
