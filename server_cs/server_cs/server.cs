@@ -42,10 +42,6 @@ namespace server_cs
             public string dob;
         }
 
-        private void chat_box_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
-
         //=================================hien
 
         private void change_pass(ref Socket client, string[] info)
@@ -279,7 +275,7 @@ namespace server_cs
                         break;
                     }
                 }
-                if (check==false)
+                if (check == false)
                 {
                     client.Send(serialize("false online"));
                 }
@@ -304,21 +300,6 @@ namespace server_cs
             Thread receive_from_client = new Thread(receive);
             receive_from_client.IsBackground = true;
             receive_from_client.Start();
-        }
-
-        private byte[] serialize(object obj)
-        {
-            MemoryStream stream = new MemoryStream();
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, obj);
-            return stream.ToArray();
-        }
-
-        private object deserialize(byte[] data)
-        {
-            MemoryStream stream = new MemoryStream(data);
-            BinaryFormatter formatter = new BinaryFormatter();
-            return formatter.Deserialize(stream);
         }
 
         private void get_data(ref List<user_info> all_users)
@@ -729,6 +710,21 @@ namespace server_cs
                 receive.IsBackground = true;
                 receive.Start();
             }
+        }
+
+        private byte[] serialize(object obj)
+        {
+            MemoryStream stream = new MemoryStream();
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(stream, obj);
+            return stream.ToArray();
+        }
+
+        private object deserialize(byte[] data)
+        {
+            MemoryStream stream = new MemoryStream(data);
+            BinaryFormatter formatter = new BinaryFormatter();
+            return formatter.Deserialize(stream);
         }
 
         private void add_message(string s)

@@ -37,6 +37,7 @@ namespace server_cs
             this.chat_box.Alignment = System.Windows.Forms.ListViewAlignment.Left;
             this.chat_box.AllowColumnReorder = true;
             this.chat_box.AllowDrop = true;
+            this.chat_box.HideSelection = false;
             this.chat_box.Location = new System.Drawing.Point(12, 12);
             this.chat_box.Name = "chat_box";
             this.chat_box.Size = new System.Drawing.Size(388, 253);
@@ -44,7 +45,6 @@ namespace server_cs
             this.chat_box.TileSize = new System.Drawing.Size(300, 15);
             this.chat_box.UseCompatibleStateImageBehavior = false;
             this.chat_box.View = System.Windows.Forms.View.Tile;
-            this.chat_box.SelectedIndexChanged += new System.EventHandler(this.chat_box_SelectedIndexChanged);
             // 
             // server
             // 

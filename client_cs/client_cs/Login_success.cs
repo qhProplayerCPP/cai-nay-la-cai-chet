@@ -10,6 +10,10 @@ namespace client_cs
 {
     public partial class Login_success : Form
     {
+        private IPEndPoint ip;
+        private Socket client_socket;
+        private string client_name, ip_address;
+
         public Login_success(string socket_name, string ip_addr)
         {
             InitializeComponent();
@@ -18,10 +22,6 @@ namespace client_cs
             ip_address = ip_addr;
             connect();
         }
-
-        private IPEndPoint ip;
-        private Socket client_socket;
-        private string client_name,ip_address;
 
         //==============================huy
         private void connect()
@@ -42,6 +42,57 @@ namespace client_cs
             receive_from_sv.IsBackground = true;
             receive_from_sv.Start();
             //=====================
+        }
+
+        private void receive()
+        {
+            Thread receive = new Thread(() =>
+            {
+                try
+                {
+                    while (true)
+                    {
+                        byte[] data = new byte[1024 * 5000];
+                        client_socket.Receive(data);
+                        string message = (string)deserialize(data);
+                        string[] info = message.Split('|');
+                        if (info[0] == "chat")
+                        {
+                            Thread chat_thread = new Thread(() =>
+                              {
+                                  Application.Run(new Client(info[1], info[2], ip_address));
+                              });
+                            chat_thread.IsBackground = true;
+                            chat_thread.Start();
+                        }
+                        else if (info[0] == "cantchat")
+                        {
+                            MessageBox.Show("This user does not online/exist");
+                        }
+                    }
+                }
+                catch
+                {
+                    client_socket.Close();
+                }
+            });
+            receive.IsBackground = true;
+            receive.Start();
+        }
+
+        private byte[] serialize(object obj)
+        {
+            MemoryStream stream = new MemoryStream();
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(stream, obj);
+            return stream.ToArray();
+        }
+
+        private object deserialize(byte[] data)
+        {
+            MemoryStream stream = new MemoryStream(data);
+            BinaryFormatter formatter = new BinaryFormatter();
+            return formatter.Deserialize(stream);
         }
 
         private void Login_success_Load(object sender, EventArgs e)
@@ -83,57 +134,6 @@ namespace client_cs
             }
         }
 
-        private void receive()
-        {
-            Thread receive = new Thread(() =>
-            {
-                try
-                {
-                    while (true)
-                    {
-                        byte[] data = new byte[1024 * 5000];
-                        client_socket.Receive(data);
-                        string message = (string)deserialize(data);
-                        string[] info = message.Split('|');
-                        if (info[0] == "chat")
-                        {
-                            Thread chat_thread = new Thread(() =>
-                              {
-                                  Application.Run(new Client(info[1], info[2],ip_address));
-                              });
-                            chat_thread.IsBackground = true;
-                            chat_thread.Start();
-                        }
-                        else if (info[0] == "cantchat")
-                        {
-                            MessageBox.Show("This user does not online/exist");
-                        }
-                    }
-                }
-                catch
-                {
-                    client_socket.Close();
-                }
-            });
-            receive.IsBackground = true;
-            receive.Start();
-        }
-
-        private byte[] serialize(object obj)
-        {
-            MemoryStream stream = new MemoryStream();
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, obj);
-            return stream.ToArray();
-        }
-
-        private object deserialize(byte[] data)
-        {
-            MemoryStream stream = new MemoryStream(data);
-            BinaryFormatter formatter = new BinaryFormatter();
-            return formatter.Deserialize(stream);
-        }
-
         //============================== Hien
         private void changepass_button_Click(object sender, EventArgs e)
         {
@@ -159,11 +159,6 @@ namespace client_cs
         {
             CheckUser form = new CheckUser();
             form.ShowDialog();
-        }
-
-        private void userchat_textBox_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
