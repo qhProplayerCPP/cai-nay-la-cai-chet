@@ -10,19 +10,21 @@ namespace client_cs
 {
     public partial class Register : Form
     {
-        public Register()
+        public Register(string ip_addr)
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
+            ip_address = ip_addr;
             connect();
         }
 
         private IPEndPoint ip;
         private Socket client_socket;
+        string ip_address;
 
         private void connect()
         {
-            ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 2503);
+            ip = new IPEndPoint(IPAddress.Parse(ip_address), 2503);
             client_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
@@ -49,7 +51,7 @@ namespace client_cs
                     string message = (string)deserialize(data);
                     if (message == "true")
                     {
-                        Application.Run(new Login_success(textBox1.Text));
+                        Application.Run(new Login_success(textBox1.Text,ip_address));
                     }
                     else
                     {

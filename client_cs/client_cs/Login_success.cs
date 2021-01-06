@@ -10,22 +10,23 @@ namespace client_cs
 {
     public partial class Login_success : Form
     {
-        public Login_success(string socket_name)
+        public Login_success(string socket_name, string ip_addr)
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
             client_name = socket_name;
+            ip_address = ip_addr;
             connect();
         }
 
         private IPEndPoint ip;
         private Socket client_socket;
-        private string client_name;
+        private string client_name,ip_address;
 
         //==============================huy
         private void connect()
         {
-            ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 2503);
+            ip = new IPEndPoint(IPAddress.Parse(ip_address), 2503);
             client_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
@@ -98,7 +99,7 @@ namespace client_cs
                         {
                             Thread chat_thread = new Thread(() =>
                               {
-                                  Application.Run(new Client(info[1], info[2]));
+                                  Application.Run(new Client(info[1], info[2],ip_address));
                               });
                             chat_thread.IsBackground = true;
                             chat_thread.Start();

@@ -70,7 +70,7 @@ namespace client_cs
                     string message = (string)deserialize(data);
                     if (message == "true")
                     {
-                        Application.Run(new Login_success(username_textBox.Text));
+                        Application.Run(new Login_success(username_textBox.Text,ip_box.Text));
                     }
                     else
                     {
@@ -102,7 +102,7 @@ namespace client_cs
 
         private void reg_button_Click(object sender, EventArgs e)
         {
-            Register form = new Register();
+            Register form = new Register(ip_box.Text);
             form.ShowDialog();
         }
 

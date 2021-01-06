@@ -10,22 +10,23 @@ namespace client_cs
 {
     public partial class Client : Form
     {
-        public Client(string s, string r)
+        public Client(string s, string r,string ip_addr)
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
             sender = s;
             receiver = r;
+            ip_address = ip_addr;
             connect();
         }
 
         private IPEndPoint ip;
         private Socket client_socket;
-        private string sender, receiver;
+        private string sender, receiver,ip_address;
 
         private void connect()
         {
-            ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 2503);
+            ip = new IPEndPoint(IPAddress.Parse(ip_address), 2503);
             client_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
