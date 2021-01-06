@@ -15,19 +15,20 @@ namespace client_cs
 {
     public partial class FileHandler : Form
     {
-        public FileHandler(string socket_name)
+        public FileHandler(string socket_name, string ip_addr)
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
             client_name = socket_name;
+            ip_address = ip_addr;
             connect();
         }
         private Socket client_socket;
         private IPEndPoint ip;
-        private string client_name;
+        private string client_name, ip_address;
         private void connect()
         {
-            ip = new IPEndPoint(IPAddress.Parse("192.168.1.3"), 2503);
+            ip = new IPEndPoint(IPAddress.Parse(ip_address), 2503);
             client_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
@@ -156,7 +157,7 @@ namespace client_cs
                     Thread sendThread = new Thread(directory =>
                     {
                         var cmd = ((string)directory).Split('|');
-                        var ipAddress = IPAddress.Parse(GetLocalIpAddress());
+                        var ipAddress = IPAddress.Parse(ip_address);
                         var port = 2503;
                         var bufferSize = 1024;
                         var client = new TcpClient();
@@ -204,8 +205,7 @@ namespace client_cs
             }
             catch
             {
-                MessageBox.Show("Disconnect from server", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                client_socket.Close();
+                MessageBox.Show("Disconnect from server. Try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void uploadbutton_Click(object sender, EventArgs e)
@@ -216,76 +216,83 @@ namespace client_cs
         }
         private void downloadbutton_Click(object sender, EventArgs e)
         {
-            var ndownfile = new SaveFile { StartPosition = FormStartPosition.CenterParent };
-            if (ndownfile.ShowDialog(this) == DialogResult.OK)
+            try
             {
-                if (ndownfile.filenametxb.Text == string.Empty)
+                var ndownfile = new SaveFile { StartPosition = FormStartPosition.CenterParent };
+                if (ndownfile.ShowDialog(this) == DialogResult.OK)
                 {
-                    MessageBox.Show("No blank!", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                else
-                {
-                    var dialogResult = MessageBox.Show(this, "Do you want to encrypt before downloading?", "Notification", MessageBoxButtons.YesNo);
-                    string message = "GETFILE" + "|" + client_name + "|" + ndownfile.filenametxb.Text + "|" + GetLocalIpAddress() + "|" + (dialogResult == DialogResult.Yes ? "Y" : "N");
-                    client_socket.Send(serialize(message));
-                    var receiveThread = new Thread(() =>
+                    if (ndownfile.filenametxb.Text == string.Empty)
                     {
-                        var cmd = ((string)message).Split('|');
-                        var listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 2504);
-                        var bufferSize = 1024;
-                        var bytesRead = 0;
-                        var allBytesRead = 0;
+                        MessageBox.Show("No blank!", "Notification", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    else
+                    {
+                        var dialogResult = MessageBox.Show(this, "Do you want to encrypt before downloading?", "Notification", MessageBoxButtons.YesNo);
+                        string message = "GETFILE" + "|" + client_name + "|" + ndownfile.filenametxb.Text + "|" + GetLocalIpAddress() + "|" + (dialogResult == DialogResult.Yes ? "Y" : "N");
+                        client_socket.Send(serialize(message));
+                        var receiveThread = new Thread(() =>
+                        {
+                            var cmd = ((string)message).Split('|');
+                            var listener = new TcpListener(IPAddress.Parse(GetLocalIpAddress()), 2504);
+                            var bufferSize = 1024;
+                            var bytesRead = 0;
+                            var allBytesRead = 0;
 
                         // Start listening
                         listener.Start();
 
                         // Accept client
                         var client = listener.AcceptTcpClient();
-                        listener.Stop();
-                        var netStream = client.GetStream();
+                            listener.Stop();
+                            var netStream = client.GetStream();
 
                         // Read length of incoming data
                         var length = new byte[4];
-                        bytesRead = netStream.Read(length, 0, 4);
-                        var dataLength = BitConverter.ToInt32(length, 0);
+                            bytesRead = netStream.Read(length, 0, 4);
+                            var dataLength = BitConverter.ToInt32(length, 0);
 
                         // Read the data
                         var bytesLeft = dataLength;
-                        var datas = new byte[dataLength];
+                            var datas = new byte[dataLength];
 
-                        while (bytesLeft > 0)
-                        {
-                            var nextPacketSize = bytesLeft > bufferSize ? bufferSize : bytesLeft;
-                            bytesRead = netStream.Read(datas, allBytesRead, nextPacketSize);
-                            allBytesRead += bytesRead;
-                            bytesLeft -= bytesRead;
-                        }
+                            while (bytesLeft > 0)
+                            {
+                                var nextPacketSize = bytesLeft > bufferSize ? bufferSize : bytesLeft;
+                                bytesRead = netStream.Read(datas, allBytesRead, nextPacketSize);
+                                allBytesRead += bytesRead;
+                                bytesLeft -= bytesRead;
+                            }
 
-                        if (cmd[4] == "Y")
-                        {
-                            datas = decrypt(datas, "dcmongtule");
-                        }
+                            if (cmd[4] == "Y")
+                            {
+                                datas = decrypt(datas, "dcmongtule");
+                            }
 
                         // Save to files
                         var frmNewName = new newfilename { StartPosition = FormStartPosition.CenterParent };
-                        if (frmNewName.ShowDialog(this) == DialogResult.OK && frmNewName.textboxnewname.Text.Trim() != string.Empty)
-                        {
-                            if (cmd[2].Contains('.'))
-                                cmd[2] = cmd[2].Substring(cmd[2].LastIndexOf('.'));
-                            cmd[2] = frmNewName.textboxnewname.Text.Trim() + cmd[2];
-                        }
-                        else
-                        {
-                            MessageBox.Show(this, "New Name is invalid. Old file name is kept", "Notification", MessageBoxButtons.OK);
-                        }
-                        File.WriteAllBytes("received\\" + cmd[2], datas);
+                            if (frmNewName.ShowDialog(this) == DialogResult.OK && frmNewName.textboxnewname.Text.Trim() != string.Empty)
+                            {
+                                if (cmd[2].Contains('.'))
+                                    cmd[2] = cmd[2].Substring(cmd[2].LastIndexOf('.'));
+                                cmd[2] = frmNewName.textboxnewname.Text.Trim() + cmd[2];
+                            }
+                            else
+                            {
+                                MessageBox.Show(this, "New Name is invalid. Old file name is kept", "Notification", MessageBoxButtons.OK);
+                            }
+                            File.WriteAllBytes("received\\" + cmd[2], datas);
                         // Clean up
                         netStream.Close();
-                        client.Close();
-                    });
-                    receiveThread.Start();
+                            client.Close();
+                        });
+                        receiveThread.Start();
+                    }
                 }
+            }
+            catch
+            {
+                MessageBox.Show("Disconnect from server. Try again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
