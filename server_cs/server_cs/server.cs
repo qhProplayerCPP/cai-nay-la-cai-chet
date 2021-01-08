@@ -816,7 +816,7 @@ namespace server_cs
                             var receiveThread = new Thread(filename =>
                             {
                                 var cmd = ((string)filename).Split('|');
-                                var listener = new TcpListener(IPAddress.Parse(GetLocalIpAddress()), 2503);
+                                var listener = new TcpListener(IPAddress.Parse(GetLocalIpAddress()), 2504);
                                 var bufferSize = 1024;
                                 var bytesRead = 0;
                                 var allBytesRead = 0;

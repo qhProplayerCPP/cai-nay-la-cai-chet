@@ -141,7 +141,7 @@ namespace client_cs
             form.ShowDialog();
         }
 
-        //==================================
+        //================================== nhan
 
         private void setup_button_Click(object sender, EventArgs e)
         {

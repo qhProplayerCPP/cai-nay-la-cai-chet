@@ -158,7 +158,7 @@ namespace client_cs
                     {
                         var cmd = ((string)directory).Split('|');
                         var ipAddress = IPAddress.Parse(ip_address);
-                        var port = 2503;
+                        var port = 2504;
                         var bufferSize = 1024;
                         var client = new TcpClient();
                         try
@@ -173,8 +173,8 @@ namespace client_cs
 
                         var netStream = client.GetStream();
                         var data = File.ReadAllBytes(cmd[0]);
-                        //if (cmd[1] == "Y")
-                        data = encrypt(data, "dcmongtule");
+                        if (cmd[1] == "Y")
+                            data = encrypt(data, "dcmongtule");
                         // Build the package
                         var dataLength = BitConverter.GetBytes(data.Length);
                         var package = new byte[4 + data.Length];
