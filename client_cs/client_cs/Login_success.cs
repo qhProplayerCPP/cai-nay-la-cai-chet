@@ -141,7 +141,7 @@ namespace client_cs
             form.ShowDialog();
         }
 
-        //==================================
+        //================================== nhan
 
         private void setup_button_Click(object sender, EventArgs e)
         {
@@ -151,7 +151,7 @@ namespace client_cs
 
         private void buttonFile_Click(object sender, EventArgs e)
         {
-            FileHandler filehandle = new FileHandler(client_name);
+            FileHandler filehandle = new FileHandler(client_name, ip_address);
             filehandle.ShowDialog();
         }
 

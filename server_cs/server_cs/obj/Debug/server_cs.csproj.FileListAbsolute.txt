@@ -28,3 +28,13 @@ D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\server_cs\se
 D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.csproj.CoreCompileInputs.cache
 D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.exe
 D:\Bài tập C++\ListofHW\Bài 135 Project MMT\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.pdb
+C:\Users\asus\Desktop\Project\cai-nay-la-cai-chet\server_cs\server_cs\bin\Debug\server_cs.exe.config
+C:\Users\asus\Desktop\Project\cai-nay-la-cai-chet\server_cs\server_cs\bin\Debug\server_cs.exe
+C:\Users\asus\Desktop\Project\cai-nay-la-cai-chet\server_cs\server_cs\bin\Debug\server_cs.pdb
+C:\Users\asus\Desktop\Project\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.csprojAssemblyReference.cache
+C:\Users\asus\Desktop\Project\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.Properties.Resources.resources
+C:\Users\asus\Desktop\Project\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.server.resources
+C:\Users\asus\Desktop\Project\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.csproj.GenerateResource.cache
+C:\Users\asus\Desktop\Project\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.csproj.CoreCompileInputs.cache
+C:\Users\asus\Desktop\Project\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.exe
+C:\Users\asus\Desktop\Project\cai-nay-la-cai-chet\server_cs\server_cs\obj\Debug\server_cs.pdb
