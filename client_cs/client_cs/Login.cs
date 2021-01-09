@@ -3,6 +3,8 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -100,8 +102,19 @@ namespace client_cs
                 int check = connect(ip_box.Text);
                 if (check == 1)
                 {
-                    object message = "login" + "|" + username_textBox.Text + "|" + password_textBox.Text;
-                    client_socket.Send(serialize(message));
+                    var dia = MessageBox.Show("Do you want to encrypt?", "Notification", MessageBoxButtons.YesNo);
+                    if (dia == DialogResult.Yes)
+                    {
+                        byte[] newpass = encrypt(Encoding.ASCII.GetBytes(password_textBox.Text), "dcmongtule");
+                        string s = System.Text.Encoding.UTF8.GetString(newpass, 0, newpass.Length);
+                        object message = "login" + "|" + username_textBox.Text + "|" + s + "|Y";
+                        client_socket.Send(serialize(message));
+                    }
+                    else
+                    {
+                        object message = "login" + "|" + username_textBox.Text + "|" + password_textBox.Text + "|N";
+                        client_socket.Send(serialize(message));
+                    }
                 }
                 else
                 {
@@ -112,6 +125,23 @@ namespace client_cs
             {
                 MessageBox.Show("Input is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private static readonly byte[] SALT = new byte[] { 0x26, 0xdc, 0xff, 0x00, 0xad, 0xed, 0x7a, 0xee, 0xc5, 0xfe, 0x07, 0xaf, 0x4d, 0x08, 0x22, 0x3c };
+
+        public static byte[] encrypt(byte[] plain, string password)
+        {
+            MemoryStream memoryStream;
+            CryptoStream cryptoStream;
+            Rijndael rijndael = Rijndael.Create();
+            Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(password, SALT);
+            rijndael.Key = pdb.GetBytes(32);
+            rijndael.IV = pdb.GetBytes(16);
+            memoryStream = new MemoryStream();
+            cryptoStream = new CryptoStream(memoryStream, rijndael.CreateEncryptor(), CryptoStreamMode.Write);
+            cryptoStream.Write(plain, 0, plain.Length);
+            cryptoStream.Close();
+            return memoryStream.ToArray();
         }
     }
 }

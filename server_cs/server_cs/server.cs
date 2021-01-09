@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Windows.Forms;
+using System.Text;
 
 namespace server_cs
 {
@@ -329,7 +330,13 @@ namespace server_cs
                 bool check2 = true;
                 foreach (user_info item in all_users)
                 {
-                    if (item.username == info[1] && item.password == info[2])
+                    string s = item.password;
+                    if (info[3] == "Y")
+                    {
+                        byte[] newpass = encrypt(Encoding.ASCII.GetBytes(item.password), "dcmongtule");
+                        s = System.Text.Encoding.UTF8.GetString(newpass, 0, newpass.Length);
+                    }
+                    if (item.username == info[1] && s == info[2])
                     {
                         check1 = true;
                         break;
@@ -798,7 +805,7 @@ namespace server_cs
             memoryStream = new MemoryStream();
             cryptoStream = new CryptoStream(memoryStream, rijndael.CreateDecryptor(), CryptoStreamMode.Write);
             cryptoStream.Write(cipher, 0, cipher.Length);
-            cryptoStream.Close();
+            //cryptoStream.Close();
             return memoryStream.ToArray();
         }
 
