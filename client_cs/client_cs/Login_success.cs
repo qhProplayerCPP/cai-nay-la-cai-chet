@@ -137,7 +137,7 @@ namespace client_cs
         //============================== Hien
         private void changepass_button_Click(object sender, EventArgs e)
         {
-            ChangePass form = new ChangePass(client_name);
+            ChangePass form = new ChangePass(client_name, ip_address);
             form.ShowDialog();
         }
 
@@ -145,7 +145,7 @@ namespace client_cs
 
         private void setup_button_Click(object sender, EventArgs e)
         {
-            Setup form = new Setup(client_name);
+            Setup form = new Setup(client_name,ip_address);
             form.ShowDialog();
         }
 
@@ -157,7 +157,7 @@ namespace client_cs
 
         private void search_button_Click(object sender, EventArgs e)
         {
-            CheckUser form = new CheckUser();
+            CheckUser form = new CheckUser(ip_address);
             form.ShowDialog();
         }
     }
