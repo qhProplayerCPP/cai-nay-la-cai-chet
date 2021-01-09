@@ -944,5 +944,10 @@ namespace server_cs
                 client.Close();
             }
         }
+
+        private void chat_box_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

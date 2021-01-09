@@ -10,20 +10,21 @@ namespace client_cs
 {
     public partial class Fullname__setup_ : Form
     {
-        public Fullname__setup_(string socket_name)
+        public Fullname__setup_(string socket_name, string ip_addr)
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
             client_name = socket_name;
+            ip_address = ip_addr;
             connect();
         }
 
         private IPEndPoint ip;
         private Socket client_socket;
-        private string client_name;
+        private string client_name,ip_address;
         private void connect()
         {
-            ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 2503);
+            ip = new IPEndPoint(IPAddress.Parse(ip_address), 2503);
             client_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {

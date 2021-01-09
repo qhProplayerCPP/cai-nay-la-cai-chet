@@ -10,18 +10,19 @@ namespace client_cs
 {
     public partial class CheckUser : Form
     {
-        public CheckUser()
+        public CheckUser(string ip_addr)
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
+            ip_address = ip_addr;
             connect();
         }
         private IPEndPoint ip;
         private Socket client_socket;
-        private string client_name;
+        private string client_name, ip_address;
         private void connect()
         {
-            ip = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 2503);
+            ip = new IPEndPoint(IPAddress.Parse(ip_address), 2503);
             client_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
@@ -37,32 +38,6 @@ namespace client_cs
             listen.Start();
         }
 
-        //private void receive()
-        //{
-        //    try
-        //    {
-        //        while (true)
-        //        {
-        //            byte[] data = new byte[1024 * 5000];
-        //            client_socket.Receive(data);
-        //            string message = (string)deserialize(data);
-        //            if (message == "true")
-        //            {
-        //                MessageBox.Show("This user exists!", "Inform", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //                this.Close();
-        //            }
-        //            else
-        //            {
-        //                MessageBox.Show("This user is not exists!", "Inform", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //            }
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        MessageBox.Show("Disconnect from server", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //        client_socket.Close();
-        //    }
-        //}
         private void receive()
         {
             Thread receive = new Thread(() =>
