@@ -41,6 +41,7 @@ namespace server_cs
             public string password;
             public string fullname;
             public string dob;
+            public string note;
         }
 
         //=================================hien
@@ -265,6 +266,32 @@ namespace server_cs
             }
         }
 
+        private void show_note(ref Socket client, string[] info)
+        {
+            try
+            {
+                get_data_note(ref all_users);
+                add_message("Dang o thread show note");
+                var index = all_users.FindIndex(c => c.username == info[1]);
+                if (index == -1)
+                {
+                    client.Send(serialize("false shownote"));
+                }
+                else
+                {
+                    IPAddress[] iptemp = Dns.GetHostAddresses(Dns.GetHostName());
+                    object message = "true shownote" + "|" + all_users[index].note + "|" + iptemp[1].ToString();
+                    client.Send(serialize(message));
+                    string notice = "Show note of " + info[1];
+                    add_message(notice);
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+
         private void check_online(ref List<CLIENT> client_list, ref Socket client, string[] info)
         {
             try
@@ -288,6 +315,24 @@ namespace server_cs
             catch
             {
                 client.Close();
+            }
+        }
+
+        private void get_data_note(ref List<user_info> all_users)
+        {
+            all_users = new List<user_info>();
+            using (StreamReader fin = new StreamReader("note.txt"))
+            {
+                while (!fin.EndOfStream)
+                {
+                    user_info temp;
+                    temp.username = fin.ReadLine();
+                    temp.password = "";
+                    temp.fullname = "";
+                    temp.dob = "";
+                    temp.note = fin.ReadLine();
+                    all_users.Add(temp);
+                }
             }
         }
 
@@ -319,6 +364,7 @@ namespace server_cs
                     temp.password = fin.ReadLine();
                     temp.fullname = fin.ReadLine();
                     temp.dob = fin.ReadLine();
+                    temp.note = "";
                     all_users.Add(temp);
                 }
             }
@@ -403,6 +449,11 @@ namespace server_cs
                         sw.WriteLine(info[2]);
                         sw.WriteLine(info[3]);
                         sw.WriteLine(info[4]);
+                    }
+                    using (StreamWriter sw = new StreamWriter("note.txt",true))
+                    {
+                        sw.WriteLine(info[1]);
+                        sw.WriteLine("");
                     }
                     string login_notice = "User " + info[1] + " connected!";
                     add_message(login_notice);
@@ -748,6 +799,15 @@ namespace server_cs
                                   Thread Show_thread = new Thread(() =>
                                   {
                                       show_all(ref client, info);
+                                  });
+                                  Show_thread.IsBackground = true;
+                                  Show_thread.Start();
+                              }
+                              else if (info[0] == "ShowNote")
+                              {
+                                  Thread Show_thread = new Thread(() =>
+                                  {
+                                      show_note(ref client, info);
                                   });
                                   Show_thread.IsBackground = true;
                                   Show_thread.Start();

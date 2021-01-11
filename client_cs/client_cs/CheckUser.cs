@@ -90,6 +90,14 @@ namespace client_cs
                         {
                             MessageBox.Show("This user is online now!", "Inform", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
+                        else if (info[0] == "false shownote")
+                        {
+                            MessageBox.Show("This user is not exists!", "Inform", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else if (info[0] == "true shownote")
+                        {
+                            MessageBox.Show("Note: " + info[1], "Inform", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
                 }
                 catch
@@ -184,6 +192,21 @@ namespace client_cs
                 MessageBox.Show("Input is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (username_textBox.Text != string.Empty)
+            {
+                IPAddress[] iptemp = Dns.GetHostAddresses(Dns.GetHostName());
+                object message = "ShowNote" + "|" + username_textBox.Text + "|" + iptemp[1].ToString();
+                client_socket.Send(serialize(message));
+            }
+            else
+            {
+                MessageBox.Show("Input is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void CheckUser_Load(object sender, EventArgs e)
         {
 

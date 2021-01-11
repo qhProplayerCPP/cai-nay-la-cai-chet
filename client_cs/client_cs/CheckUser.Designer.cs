@@ -36,6 +36,7 @@ namespace client_cs
             this.username_textBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -107,11 +108,22 @@ namespace client_cs
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(78, 397);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(185, 39);
+            this.button6.TabIndex = 7;
+            this.button6.Text = "Show Note";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
             // CheckUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(343, 407);
+            this.ClientSize = new System.Drawing.Size(343, 471);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.username_textBox);
             this.Controls.Add(this.label1);
@@ -136,5 +148,6 @@ namespace client_cs
         private System.Windows.Forms.TextBox username_textBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button6;
     }
 }
