@@ -19,7 +19,6 @@ namespace client_cs
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
-            connect(ip_box.Text);
         }
 
         private int connect(string ip_box)
