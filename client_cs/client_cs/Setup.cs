@@ -40,7 +40,9 @@ namespace client_cs
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            this.Close();
+            Note_Setup form = new Note_Setup(client_name, ip_address);
+            form.ShowDialog();
         }
     }
 }

@@ -164,6 +164,42 @@ namespace server_cs
             }
         }
 
+        private void setup_note(ref Socket client, string[] info)
+        {
+            try
+            {
+                get_data_note(ref all_users);
+                add_message("Dang o thread setup_note");
+                var index = all_users.FindIndex(c => c.username == info[1]);
+                if (index == -1)
+                {
+                    client.Send(serialize("false"));
+                }
+                else
+                {
+                    user_info temp = all_users[index];
+                    temp.note = info[2];
+                    all_users[index] = new user_info();
+                    all_users[index] = temp;
+                    client.Send(serialize("true"));
+                    using (TextWriter tw = new StreamWriter("note.txt", false))
+                    {
+                        foreach (user_info s in all_users)
+                        {
+                            tw.WriteLine(s.username);
+                            tw.WriteLine(s.note);
+                        }
+                    }
+                    string notice = "User " + info[1] + " updated note successfully!";
+                    add_message(notice);
+                }
+            }
+            catch
+            {
+                client.Close();
+            }
+        }
+
         private void find_user(ref Socket client, string[] info)
         {
             try
@@ -758,6 +794,15 @@ namespace server_cs
                                   DOB_thread.IsBackground = true;
                                   DOB_thread.Start();
                               }
+                              else if (info[0] == "Note")
+                              {
+                                  Thread Note_thread = new Thread(() =>
+                                  {
+                                      setup_note(ref client, info);
+                                  });
+                                  Note_thread.IsBackground = true;
+                                  Note_thread.Start();
+                              }
                               else if (info[0] == "FindUser")
                               {
                                   Thread FindUser_thread = new Thread(() =>
@@ -812,6 +857,7 @@ namespace server_cs
                                   Show_thread.IsBackground = true;
                                   Show_thread.Start();
                               }
+                              
                           }
                       }
                       catch
