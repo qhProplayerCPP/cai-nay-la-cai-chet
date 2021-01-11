@@ -59,6 +59,10 @@ namespace server_cs
                 else
                 {
                     user_info temp = all_users[index];
+                    if (info[4]=="Y")
+                    {
+                        info[3] = Decrypt(info[3], "dcmongtule");
+                    }
                     temp.password = info[3];
                     all_users[index] = new user_info();
                     all_users[index] = temp;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -110,9 +111,8 @@ namespace client_cs
                     var dia = MessageBox.Show("Do you want to encrypt?", "Notification", MessageBoxButtons.YesNo);
                     if (dia == DialogResult.Yes)
                     {
-                        byte[] newpass = encrypt(Encoding.ASCII.GetBytes(newpassword_textBox.Text), "dcmongtule");
-                        string s = System.Text.Encoding.UTF8.GetString(newpass, 0, newpass.Length);
-                        object message = "changepass" + "|" + client_name + "|" + oldpassword_textBox.Text + "|" + newpassword_textBox.Text + "|" + s + "|Y";
+                        string s = Encrypt(newpassword_textBox.Text, "dcmongtule");
+                        object message = "changepass" + "|" + client_name + "|" + oldpassword_textBox.Text + "|" + s + "|Y";
                         client_socket.Send(serialize(message));
                     }
                     else
@@ -132,20 +132,51 @@ namespace client_cs
             }
         }
 
-        private static readonly byte[] SALT = new byte[] { 0x26, 0xdc, 0xff, 0x00, 0xad, 0xed, 0x7a, 0xee, 0xc5, 0xfe, 0x07, 0xaf, 0x4d, 0x08, 0x22, 0x3c };
-        public static byte[] encrypt(byte[] plain, string password)
+
+        private const int Keysize = 256;
+
+        private const int DerivationIterations = 1000;
+        public static string Encrypt(string plainText, string passPhrase)
         {
-            MemoryStream memoryStream;
-            CryptoStream cryptoStream;
-            Rijndael rijndael = Rijndael.Create();
-            Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(password, SALT);
-            rijndael.Key = pdb.GetBytes(32);
-            rijndael.IV = pdb.GetBytes(16);
-            memoryStream = new MemoryStream();
-            cryptoStream = new CryptoStream(memoryStream, rijndael.CreateEncryptor(), CryptoStreamMode.Write);
-            cryptoStream.Write(plain, 0, plain.Length);
-            cryptoStream.Close();
-            return memoryStream.ToArray();
+            var saltStringBytes = Generate256BitsOfRandomEntropy();
+            var ivStringBytes = Generate256BitsOfRandomEntropy();
+            var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+            using (var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations))
+            {
+                var keyBytes = password.GetBytes(Keysize / 8);
+                using (var symmetricKey = new RijndaelManaged())
+                {
+                    symmetricKey.BlockSize = 256;
+                    symmetricKey.Mode = CipherMode.CBC;
+                    symmetricKey.Padding = PaddingMode.PKCS7;
+                    using (var encryptor = symmetricKey.CreateEncryptor(keyBytes, ivStringBytes))
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+                            {
+                                cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
+                                cryptoStream.FlushFinalBlock();
+                                var cipherTextBytes = saltStringBytes;
+                                cipherTextBytes = cipherTextBytes.Concat(ivStringBytes).ToArray();
+                                cipherTextBytes = cipherTextBytes.Concat(memoryStream.ToArray()).ToArray();
+                                memoryStream.Close();
+                                cryptoStream.Close();
+                                return Convert.ToBase64String(cipherTextBytes);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        private static byte[] Generate256BitsOfRandomEntropy()
+        {
+            var randomBytes = new byte[32];
+            using (var rngCsp = new RNGCryptoServiceProvider())
+            {
+                rngCsp.GetBytes(randomBytes);
+            }
+            return randomBytes;
         }
     }
 }
