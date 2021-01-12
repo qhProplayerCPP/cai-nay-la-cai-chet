@@ -29,22 +29,22 @@ namespace client_cs
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            this.changepass_button = new System.Windows.Forms.Button();
             this.newpassword_textBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.oldpassword_textBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // button1
+            // changepass_button
             // 
-            this.button1.Location = new System.Drawing.Point(206, 143);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(94, 32);
-            this.button1.TabIndex = 18;
-            this.button1.Text = "Confirm";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            this.changepass_button.Location = new System.Drawing.Point(206, 143);
+            this.changepass_button.Name = "changepass_button";
+            this.changepass_button.Size = new System.Drawing.Size(94, 32);
+            this.changepass_button.TabIndex = 18;
+            this.changepass_button.Text = "Confirm";
+            this.changepass_button.UseVisualStyleBackColor = true;
+            this.changepass_button.Click += new System.EventHandler(this.changepass_button_Click);
             // 
             // newpassword_textBox
             // 
@@ -91,7 +91,7 @@ namespace client_cs
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(475, 204);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.changepass_button);
             this.Controls.Add(this.newpassword_textBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.oldpassword_textBox);
@@ -106,7 +106,7 @@ namespace client_cs
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button changepass_button;
         private System.Windows.Forms.TextBox newpassword_textBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox oldpassword_textBox;

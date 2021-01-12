@@ -19,26 +19,26 @@ namespace client_cs
         }
 
         private string client_name,ip_address;
+        private void Setup_Load(object sender, EventArgs e)
+        {
 
-        private void button1_Click(object sender, EventArgs e)
+        }
+
+        private void setupname_button_Click(object sender, EventArgs e)
         {
             this.Close();
             Fullname__setup_ form = new Fullname__setup_(client_name, ip_address);
             form.ShowDialog();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void setupdate_button_Click(object sender, EventArgs e)
         {
             this.Close();
-            Date__setup_ form = new Date__setup_(client_name,ip_address);
+            Date__setup_ form = new Date__setup_(client_name, ip_address);
             form.ShowDialog();
         }
-        private void Setup_Load(object sender, EventArgs e)
-        {
 
-        }
-
-        private void button3_Click(object sender, EventArgs e)
+        private void setupnote_button_Click(object sender, EventArgs e)
         {
             this.Close();
             Note_Setup form = new Note_Setup(client_name, ip_address);

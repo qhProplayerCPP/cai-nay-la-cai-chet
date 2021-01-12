@@ -141,24 +141,24 @@ namespace client_cs
             form.ShowDialog();
         }
 
-        //================================== nhan
-
         private void setup_button_Click(object sender, EventArgs e)
         {
-            Setup form = new Setup(client_name,ip_address);
+            Setup form = new Setup(client_name, ip_address);
             form.ShowDialog();
-        }
-
-        private void buttonFile_Click(object sender, EventArgs e)
-        {
-            FileHandler filehandle = new FileHandler(client_name, ip_address);
-            filehandle.ShowDialog();
         }
 
         private void search_button_Click(object sender, EventArgs e)
         {
             CheckUser form = new CheckUser(ip_address);
             form.ShowDialog();
+        }
+
+        //================================== nhan
+
+        private void buttonFile_Click(object sender, EventArgs e)
+        {
+            FileHandler filehandle = new FileHandler(client_name, ip_address);
+            filehandle.ShowDialog();
         }
     }
 }

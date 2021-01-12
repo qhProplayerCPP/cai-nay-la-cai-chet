@@ -89,8 +89,7 @@ namespace client_cs
         {
 
         }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void setupName_button_Click(object sender, EventArgs e)
         {
             if (name_textBox.Text != string.Empty)
             {

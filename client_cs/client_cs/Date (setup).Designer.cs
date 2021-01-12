@@ -52,7 +52,7 @@ namespace client_cs
             this.button1.TabIndex = 7;
             this.button1.Text = "Confirm";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.setupDate_button_Click);
             // 
             // date_textBox
             // 

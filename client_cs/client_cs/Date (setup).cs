@@ -90,7 +90,7 @@ namespace client_cs
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void setupDate_button_Click(object sender, EventArgs e)
         {
             if (date_textBox.Text != string.Empty)
             {

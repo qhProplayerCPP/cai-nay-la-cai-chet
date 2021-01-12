@@ -29,7 +29,6 @@ namespace client_cs
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
@@ -37,17 +36,8 @@ namespace client_cs
             this.label1 = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
+            this.find_button = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(78, 81);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(185, 39);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Find User";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
@@ -57,7 +47,7 @@ namespace client_cs
             this.button2.TabIndex = 1;
             this.button2.Text = "Check Online";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.online_button_Click);
             // 
             // button3
             // 
@@ -67,7 +57,7 @@ namespace client_cs
             this.button3.TabIndex = 2;
             this.button3.Text = "Show Date";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.showdate_button_Click);
             // 
             // button4
             // 
@@ -77,7 +67,7 @@ namespace client_cs
             this.button4.TabIndex = 3;
             this.button4.Text = "Show Fullname";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.showname_button_Click);
             // 
             // username_textBox
             // 
@@ -106,7 +96,7 @@ namespace client_cs
             this.button5.TabIndex = 6;
             this.button5.Text = "Show All";
             this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button5.Click += new System.EventHandler(this.showall_button_Click);
             // 
             // button6
             // 
@@ -116,13 +106,24 @@ namespace client_cs
             this.button6.TabIndex = 7;
             this.button6.Text = "Show Note";
             this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.button6.Click += new System.EventHandler(this.shownote_button_Click);
+            // 
+            // find_button
+            // 
+            this.find_button.Location = new System.Drawing.Point(78, 81);
+            this.find_button.Name = "find_button";
+            this.find_button.Size = new System.Drawing.Size(185, 40);
+            this.find_button.TabIndex = 8;
+            this.find_button.Text = "Find User";
+            this.find_button.UseVisualStyleBackColor = true;
+            this.find_button.Click += new System.EventHandler(this.find_button_Click);
             // 
             // CheckUser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(343, 471);
+            this.Controls.Add(this.find_button);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.username_textBox);
@@ -130,7 +131,6 @@ namespace client_cs
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
             this.Name = "CheckUser";
             this.Text = "CheckUser";
             this.Load += new System.EventHandler(this.CheckUser_Load);
@@ -140,8 +140,6 @@ namespace client_cs
         }
 
         #endregion
-
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
@@ -149,5 +147,6 @@ namespace client_cs
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button find_button;
     }
 }

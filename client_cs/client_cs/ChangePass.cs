@@ -101,38 +101,7 @@ namespace client_cs
 
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            if (client_name != string.Empty && oldpassword_textBox.Text != string.Empty && newpassword_textBox.Text != string.Empty)
-            {
-                int check = connect(ip_address);
-                if (check == 1)
-                {
-                    var dia = MessageBox.Show("Do you want to encrypt?", "Notification", MessageBoxButtons.YesNo);
-                    if (dia == DialogResult.Yes)
-                    {
-                        string s = Encrypt(newpassword_textBox.Text, "dcmongtule");
-                        object message = "changepass" + "|" + client_name + "|" + oldpassword_textBox.Text + "|" + s + "|Y";
-                        client_socket.Send(serialize(message));
-                    }
-                    else
-                    {
-                        object message = "changepass" + "|" + client_name + "|" + oldpassword_textBox.Text + "|" + newpassword_textBox.Text + "|N";
-                        client_socket.Send(serialize(message));
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Server IP invalid");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Input is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
+       
         private const int Keysize = 256;
 
         private const int DerivationIterations = 1000;
@@ -169,6 +138,38 @@ namespace client_cs
                 }
             }
         }
+
+        private void changepass_button_Click(object sender, EventArgs e)
+        {
+            if (client_name != string.Empty && oldpassword_textBox.Text != string.Empty && newpassword_textBox.Text != string.Empty)
+            {
+                int check = connect(ip_address);
+                if (check == 1)
+                {
+                    var dia = MessageBox.Show("Do you want to encrypt?", "Notification", MessageBoxButtons.YesNo);
+                    if (dia == DialogResult.Yes)
+                    {
+                        string s = Encrypt(newpassword_textBox.Text, "dcmongtule");
+                        object message = "changepass" + "|" + client_name + "|" + oldpassword_textBox.Text + "|" + s + "|Y";
+                        client_socket.Send(serialize(message));
+                    }
+                    else
+                    {
+                        object message = "changepass" + "|" + client_name + "|" + oldpassword_textBox.Text + "|" + newpassword_textBox.Text + "|N";
+                        client_socket.Send(serialize(message));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Server IP invalid");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Input is invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private static byte[] Generate256BitsOfRandomEntropy()
         {
             var randomBytes = new byte[32];

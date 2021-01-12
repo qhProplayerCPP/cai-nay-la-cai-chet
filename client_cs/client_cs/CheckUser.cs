@@ -123,12 +123,13 @@ namespace client_cs
             return formatter.Deserialize(stream);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+
+        private void find_button_Click(object sender, EventArgs e)
         {
             if (username_textBox.Text != string.Empty)
             {
                 IPAddress[] iptemp = Dns.GetHostAddresses(Dns.GetHostName());
-                object message = "FindUser" + "|"  + username_textBox.Text + "|" + iptemp[1].ToString();
+                object message = "FindUser" + "|" + username_textBox.Text + "|" + iptemp[1].ToString();
                 client_socket.Send(serialize(message));
             }
             else
@@ -137,7 +138,7 @@ namespace client_cs
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void online_button_Click(object sender, EventArgs e)
         {
             if (username_textBox.Text != string.Empty)
             {
@@ -151,7 +152,7 @@ namespace client_cs
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void showdate_button_Click(object sender, EventArgs e)
         {
             if (username_textBox.Text != string.Empty)
             {
@@ -165,7 +166,7 @@ namespace client_cs
             }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void showname_button_Click(object sender, EventArgs e)
         {
             if (username_textBox.Text != string.Empty)
             {
@@ -179,7 +180,7 @@ namespace client_cs
             }
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void showall_button_Click(object sender, EventArgs e)
         {
             if (username_textBox.Text != string.Empty)
             {
@@ -193,7 +194,7 @@ namespace client_cs
             }
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void shownote_button_Click(object sender, EventArgs e)
         {
             if (username_textBox.Text != string.Empty)
             {

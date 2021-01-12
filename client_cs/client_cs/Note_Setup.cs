@@ -92,7 +92,7 @@ namespace client_cs
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void setupNote_button_Click(object sender, EventArgs e)
         {
             if (Note_textBox.Text != string.Empty)
             {
